@@ -61,8 +61,9 @@ The basic premise of offers is that I send you a signed spend bundle which spend
 
 When I create my spend bundle I don't know who is going to accept it, so I don't know the address where my coins should go. I also have to be sure that you're sending me the right coins and amount in return. To solve these problems we use an intermediate puzzle called the settlement puzzle, and use announcements to check that each party is receiving the right coins.
 
-
-##
+#+CAPTION: Outline of the Maker and Taker spends with announcements
+#+NAME:   fig:SED-HR4049
+[[file:images/Offer.png]]
 
 
 When the maker creates an offer, they are spending some amount of an asset to the settlement puzzle, which creates a new settlement coin. The maker includes an src_chialisp[:exports code]{ASSERT_PUZZLE_ANNOUNCEMENT} conditon in their solution, which asserts the payment they want to receive in exchange for the amount they are offering. This means that their spend can only succeed if there is a matching announcement from a settlement puzzle. The settlement puzzle itself calculates this announcements so there is no way for it to be manipulated.
@@ -196,7 +197,7 @@ src_chialisp[:exports code]{create_announcement_for_puzzle} creates a puzzle ann
 )
 #+end_src
 
-src_chialisp[:exports code]{create_announcement_for_payment} produces the CREATE_COIN condition using the puzzle hash and amount from the notarized payment.
+src_chialisp[:exports code]{create_announcement_for_payment} produces the src_chialisp[:exports code]{CREATE_COIN} condition using the puzzle hash and amount from the notarized payment.
 
 #+begin_src chialisp
 (defun create_coins_for_payment (payment_params so_far)
