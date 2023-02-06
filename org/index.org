@@ -1,0 +1,23 @@
+#+options: html-link-use-abs-url:nil html-postamble:auto
+#+options: html-preamble:t html-scripts:t html-style:t
+#+options: html5-fancy:nil tex:t num:nil toc:nil ^:nil
+#+html_doctype: xhtml-strict
+#+html_container: div
+#+TITLE: AGG_SIG_ME
+#+description: Index of aggsig.me
+#+keywords: Chia, Chialisp, Chialisp Tutorials, Chialisp Examples
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./css/tufte.css" />
+#+HTML_HEAD_EXTRA: <style type="text/css">#content{max-width: 800px}</style>
+#+HTML_HEAD_EXTRA: <style type="text/css">.title{text-align: left;}</style>
+#+HTML_HEAD_EXTRA: <style type="text/css">pre.code{background-color: #111; color: #fff} pre > code{width: 100%; margin-left: 0px;}</style>
+#+subtitle:
+#+infojs_opt:
+#+creator: <a href="https://keybase.io/geoff_w">Geoff Walmsley</a> 
+#+latex_header:
+
+
+-----
+This is my personal website of chialisp-related things.
+
+
+[[file:offers.org][A technical guide to offers]]
