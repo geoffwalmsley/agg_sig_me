@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="agg_sig_me">
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<style type="text/css">.figure {width: 55%; vertical-align: baseline;}</style></head>
+<body>
+<div id="body"><div id="container"><div id="navigation"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="uses_this.html">Uses This</a></div><div id="content"><article><h1 class="title">List Destructuring with @</h1>
+<section><p>
+Modern chialisp provides a handy way of assigning names to the elements of a list using the <code>@</code> symbol. In common lisp this is known as destructuring:
+</p>
+
+<div class="epigraph"><blockquote>
+<p>
+Destructuring allows you to bind a set of variables to a corresponding set of values anywhere that you can normally bind a value to a single variable.
+</p>
+
+</blockquote></div>
+
+<p>
+This means that we can define a function, pass it a list of items, and give each of those items its own name. Here's a simple example:
+</p>
+
+<pre class="code"><code>(<span style="color: #b6a0ff;">mod</span>
+
+  (<span style="color: #b6a0ff;">defun</span> add_items (@ some_<span style="color: #00bcff;">list</span> (X Y Z))
+    (+ X Y Z)
+  )
+
+  (add_items (<span style="color: #00bcff;">list</span> 10 20 30))
+)
+</code></pre>
+
+<p>
+Running this code will add the values 10, 20, and 30 and return a value of 60.
+</p>
+</section>
+
+<section><h3>Why is this useful</h3>
+<p>
+Chialisp often requires passing around ordered lists and accessing the elements as we need them by various forms of <code>(f (r (f item)))</code>. This makes the code quite hard to read and requires us to remember the structure of <code>items</code>. This is where list destructuring comes to the rescue.
+</p>
+
+<p>
+Let's say we have a function that calculates coin IDs from a list of lists. Each element of the list is itself a list of the form: <code>(parent_id, puzzle_hash, amount)</code>. Our function might look something like this:
+</p>
+
+<pre class="code"><code>(<span style="color: #b6a0ff;">defun</span> get__coin_ids (coin_info_lst)
+  (<span style="color: #00bcff;">if</span> coin_info_lst
+    (<span style="color: #00bcff;">c</span>
+      (calculate_coin_id
+        (<span style="color: #00bcff;">f</span> coin_info_lst)
+        (<span style="color: #00bcff;">f</span> (<span style="color: #00bcff;">r</span> coin_info_lst))
+        (<span style="color: #00bcff;">f</span> (<span style="color: #00bcff;">r</span> (<span style="color: #00bcff;">r</span> coin_info_lst)))
+      )
+      (get_coin_ids (<span style="color: #00bcff;">r</span> coin_info_lst))
+    )
+  ()
+)
+</code></pre>
+
+<p>
+Even though this is a simple function, it's quite messy and we've had to type out <code>coin_info_lst</code> many times. We can simplify it with list destructuring as follows:
+</p>
+
+
+<pre class="code"><code>(<span style="color: #b6a0ff;">defun</span> get_coin_ids
+  ((@ coin_info_lst ((@ first (parent puzhash amount)) . rest)))
+
+  (<span style="color: #00bcff;">if</span> coin_info_lst
+    (<span style="color: #00bcff;">c</span>
+      (calculate_coin_id parent puzhash amount)
+      (get_coin_ids rest)
+    )
+    ()
+  )     
+)          
+</code></pre>
+</section>
+
+<section><h3>How it works</h3>
+<p>
+The key insight (thanks to Arty for articulating this) is that lists are just right-heavy trees. So we can destructure them into <code>first</code> and <code>rest</code>. We then assign names to the elements of <code>first</code>, and use them as needed. And when its time to make the recursion call we can just pass in <code>rest</code>.
+</p>
+</section>
+
+<section><h3>Limitations</h3>
+<p>
+This won't eliminate the need for complex <code>(f (r (f ... )))</code> blocks altogether. In cases where we want to access multiple items from the outer list at the same time, we'd still need to use <code>(f rest)</code> to access the next set of elements.
+</p>
+</section>

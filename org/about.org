@@ -1,0 +1,26 @@
+#+TITLE: About
+
+I'm Geoff Walmlsey, a programmer on the team at [[https://chia.net][Chia Network]]. I primarily work on Chialisp and writing wallet code.
+
+My location changes fairly frequently:
+- New Zealand (home country)
+- United Kingdom
+- Netherlands
+- Greece (current)
+
+Here are some of my interests:
+- Chess
+- Piano/Guitar
+- Books (currently New Zealand fiction writers)
+- Languages (Greek, German, Maori)
+- Cooking
+- Emacs
+- Rust, Lisp, Mojo
+- Compiler Design
+- OSS
+
+* Contact Links
+- email: [[mailto:geoffwalmlsey@gmail.com][geoffwalmsley@gmail.com]]
+- keybase: [[https://keybase.io/geoff_w][geoff_w]]
+- github: [[https://github.com/geoffwalmsley][geoffwalmsley]]
+- twitter: [[https://twitter.com/geoffrey_io][geoffrey_io]]

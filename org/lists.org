@@ -1,0 +1,67 @@
+#+TITLE: List Destructuring with @
+#+description: list destructuring in chialisp
+#+keywords: Chia, Chialisp, Chialisp Tutorials, Destructuring, Assign
+
+Modern chialisp provides a handy way of assigning names to the elements of a list using the ~@~ symbol. In common lisp this is known as destructuring:
+
+#+BEGIN_QUOTE
+Destructuring allows you to bind a set of variables to a corresponding set of values anywhere that you can normally bind a value to a single variable.
+#+END_QUOTE
+
+This means that we can define a function, pass it a list of items, and give each of those items its own name. Here's a simple example:
+
+#+begin_src chialisp
+  (mod
+
+    (defun add_items (@ some_list (X Y Z))
+      (+ X Y Z)
+    )
+
+    (add_items (list 10 20 30))
+  )
+#+end_src
+
+Running this code will add the values 10, 20, and 30 and return a value of 60.
+
+** Why is this useful
+Chialisp often requires passing around ordered lists and accessing the elements as we need them by various forms of ~(f (r (f item)))~. This makes the code quite hard to read and requires us to remember the structure of ~items~. This is where list destructuring comes to the rescue.
+
+Let's say we have a function that calculates coin IDs from a list of lists. Each element of the list is itself a list of the form: ~(parent_id, puzzle_hash, amount)~. Our function might look something like this:
+
+#+begin_src chialisp
+  (defun get__coin_ids (coin_info_lst)
+    (if coin_info_lst
+      (c
+        (calculate_coin_id
+          (f coin_info_lst)
+          (f (r coin_info_lst))
+          (f (r (r coin_info_lst)))
+        )
+        (get_coin_ids (r coin_info_lst))
+      )
+    ()
+  )
+#+end_src
+
+Even though this is a simple function, it's quite messy and we've had to type out ~coin_info_lst~ many times. We can simplify it with list destructuring as follows:
+
+
+#+begin_src chialisp
+  (defun get_coin_ids
+    ((@ coin_info_lst ((@ first (parent puzhash amount)) . rest)))
+
+    (if coin_info_lst
+      (c
+        (calculate_coin_id parent puzhash amount)
+        (get_coin_ids rest)
+      )
+      ()
+    )	
+  )          
+#+end_src
+
+** How it works
+The key insight (thanks to Arty for articulating this) is that lists are just right-heavy trees. So we can destructure them into ~first~ and ~rest~. We then assign names to the elements of ~first~, and use them as needed. And when its time to make the recursion call we can just pass in ~rest~.
+
+** Limitations
+This won't eliminate the need for complex ~(f (r (f ... )))~ blocks altogether. In cases where we want to access multiple items from the outer list at the same time, we'd still need to use ~(f rest)~ to access the next set of elements.

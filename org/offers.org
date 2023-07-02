@@ -1,23 +1,10 @@
-#+options: html-link-use-abs-url:nil html-postamble:auto
-#+options: html-preamble:t html-scripts:t html-style:t
-#+options: html5-fancy:nil tex:t num:nil toc:nil ^:nil
-#+html_doctype: xhtml-strict
-#+html_container: div
 #+TITLE: Offers
 #+description: How chia offers work
 #+keywords: Chia, Chialisp, Chialisp Tutorials, Chialisp Examples, Offers
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./css/tufte.css" />
-#+HTML_HEAD_EXTRA: <style type="text/css">#content{max-width: 800px}</style>
-#+HTML_HEAD_EXTRA: <style type="text/css">.title{text-align: left;}</style>
-#+HTML_HEAD_EXTRA: <style type="text/css">pre.code{background-color: #111; color: #fff} pre > code{width: 100%; margin-left: 0px;}</style>
-#+subtitle:
-#+infojs_opt:
-#+creator: <a href="https://geoffrey.io">Geoff Walmsley</a> 
-#+latex_header:
 
 This article attempts to provide a detailed explanation of how offers work. We start with the underlying primitives of coins, coin spends, and spend bundles, and then look at the chialisp for the settlement puzzle which makes offers possible.
 
-** Coin
+* Coin
 
 A coin consists of three pieces of information:
 [[mn:1][Anyone can try to spend any coin - the puzzle which controls the coin will determine whether a signature is required. If the puzzle doesn't include a signature condition then anyone who knows the puzzle can spend the coin.]]
@@ -28,17 +15,17 @@ A coin consists of three pieces of information:
 
 To spend a coin, we have to know the puzzle (program) that equates to the puzzle hash. The output of the program is a set of conditions which create new coins, ask for signatures, check timelocks etc.
 
-** CoinSpend
+* CoinSpend
 A coin spend is the set of information needed to spend a coin:
-- ~coin~: The coin that's being spent, src_python[:exports code]{[parent_coin_id, puzzle_hash, amount]}
-- ~puzzle_reveal~: The program which matches the coin's puzzle_hash
+- =coin=: The coin that's being spent, src_python[:exports code]{[parent_coin_id, puzzle_hash, amount]}
+- =puzzle_reveal=: The program which matches the coin's puzzle_hash
 - ~solution~: Another program that is fed into the puzzle_reveal to provide the input data the program needs to execute
 
 [[mn:2][Puzzles don't necessarily have to have a solution, but typically we will pass conditions into the solution that tell the puzzle where they are sending some amount to, and to make assertions or create signatures. See the chialisp condition codes for more info]]
 
 When we try to spend a coin, the node looks at the puzzle_reveal and calculates its treehash, then checks that this treehash equals the puzzle hash of the coin we're attempting to spend.
 
-** SpendBundles
+* SpendBundles
 A SpendBundle consists of:
 1. A list of CoinSpends  (ie a coin, its puzzle, and its solution)
 2. A Signature which approves all the coin spends
@@ -47,16 +34,16 @@ The SpendBundle object can be written out as a series of bytes - basically just 
 
 Anyone can send any spend bundle to the node for checking and inclusion into mempool. If I create a signed spend bundle for some xch in my wallet, and send the byte string of the spend bundle to you, you are able to submit the spend on your full node. The good thing about signatures is, you can't modify the solution without breaking the signature.
 
-*** Aggregation
+** Aggregation
 A useful feature of spend bundles is that they can be aggregated. If you have a set of several spend bundles, you can join them together, even if the coin spends have different signatures they can all be joined together.
 
-*** Methods
+** Methods
 The spendbundle object provides two methods which define what happens to the coins used in its coin spends: additions and removals. 
 - src_python[:exports code]{SpendBundle.additions()} tells us what coins are being created
 - src_python[:exports code]{SpendBundle.removals()} tells use what coins are being destroyed
 It calculates these two sets by running the puzzle and solution and looking at the src_chialisp[:exports code]{CREATE_COIN} conditions that are produced (additions), and which coins are included in the coinspend object (removals)
 
-**  How Offers Work
+*  How Offers Work
 The basic premise of offers is that I send you a signed spend bundle which spends the coins I want to sell. I publish that spend bundle somewhere, so you can copy it. You then create a spendbundle of the coins I want to buy, and aggregate that with the spend bundle I published. When you submit the complete spend bundle to the node, it checks the spend bundles and if they are all correct, then the spend executes and we make a successful trade.
 
 When I create my spend bundle I don't know who is going to accept it, so I don't know the address where my coins should go. I also have to be sure that you're sending me the right coins and amount in return. To solve these problems we use an intermediate puzzle called the settlement puzzle, and use announcements to check that each party is receiving the right coins.
@@ -70,7 +57,7 @@ When the maker creates an offer, they are spending some amount of an asset to th
 
 To accept the offer, the taker creates a spend of the requested asset to the settlement puzzle, including an appropriate announcement to match the one coming from the maker's settlement puzzle.
 
-*** Example of an ~XCH~ to  ~SBX~ offer
+** Example of an XCH to  SBX offer
 Lets assume the offer maker wants to create an offer where they will *pay ~1 XCH~* in return for *~100 SBX~* (spacebucks CAT). So they will find a regular ~XCH~ coin in their wallet which will make up their part of the trade. They'll also get a puzzlehash where they can receive the ~SBX~.
 
 The maker then creates a solution for their ~XCH~ coin which produces the following conditions:
@@ -99,7 +86,7 @@ With these 4 coin spends (the maker's ~XCH~ spend, the ~XCH~ settlement, the tak
 
 Any attempt by the taker to screw with the amount or the puzzle hash where the sbx are going will cause the announcnments to fail. Similarly, if they try to spend a different asset, then the cat layer of the settlement puzzle will mean there is an incorrect puzzle hash creating the announcement.
 
-*** Exploring the Code
+** Exploring the Code
 
 #+begin_src chialisp
   (mod notarized_payments
@@ -159,7 +146,7 @@ So what is a notarized payment in this context? It's essentially the thing we're
 
 The rest of this code block just imports some library code and defines a function to creeate a tree-hash which is just a way of creating a hash of a tree (or list) of data.
 
-Now we'll jump to the bottom of the file where we see src_chialisp[:exports code]{(construct_condition_list notarized_payments)}. This says we should run the construct_condition_list function, using our notarized_payments variable as input.
+Now we'll jump to the bottom of the file where we see src_chialisp[:exports code]{(construct_condition_list notarized_payments)}. This says we should run the =construct_condition_list= function, using our notarized_payments variable as input.
 
 #+begin_src chialisp
 (defun construct_condition_list (notarized_payments)

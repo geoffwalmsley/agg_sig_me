@@ -1,0 +1,1117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-11-03 Wed 20:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Signatures in Chia</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Geoff Walmsley" />
+<meta name="description" content="Index of aggsig.me"
+ />
+<meta name="keywords" content="Chia, Chialisp, Chialisp Tutorials, Chialisp Examples" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="./css/tufte.css" />
+<style type="text/css">#content{max-width: 800px}</style>
+<style type="text/css">.title{text-align: left;}</style>
+<style type="text/css">pre.code{background-color: #111; color: #fff} pre > code{width: 100%; margin-left: 0px;}</style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<article id="content">
+<h1 class="title">Signatures in Chia</h1>
+<p>
+This page is a record of information about BLS signatures aimed at helping understand and properly use signatures in chialisp. For coins to work in the real world the signatures have to be used deliberately and precisely. I tried to avoid learning the details because it seemed intimidating. In the end the math was very enjoyable and worth the effort. Plus, a better understanding of BLS gives much greater confidence when trying to program coins securely.
+</p>
+
+<div id="outline-container-org16408f8" class="outline-2">
+<h2 id="org16408f8">What are BLS Signatures?</h2>
+<div class="outline-text-2" id="text-org16408f8">
+<p>
+BLS is a mathematical process that produces cryptographic keys, and lets us use those keys to sign and verify messages between parties. Some advantages of BLS over other cryptographic standards are  that it:
+</p>
+
+<ul class="org-ul">
+<li>produces keys more efficiently</li>
+<li>Allows us to create many pubkeys from a single pub/secret pair.</li>
+<li>Enables aggregated signatures</li>
+</ul>
+
+
+<p>
+The security of BLS stems from the properties of certain elliptic curves. These properties mean BLS signatures can be aggregated very easily which is important for cryptocurrencies where transaction scaling is important.
+</p>
+
+<p>
+Some links:
+</p>
+<ul class="org-ul">
+<li><a href="https://www.youtube.com/watch?v=cVgJBdM5E2M">A good overview of BLS</a></li>
+<li><a href="https://www.youtube.com/watch?v=8WDOpzxpnTE">Crypto Key Pairings</a> (Talk by Dan Boneh, the B of BLS)</li>
+<li><a href="https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/">Pairing-friendly elliptic curves</a></li>
+<li><a href="https://hackmd.io/@benjaminion/bls12-381">BLS12-381 The elliptic curve used by chia</a></li>
+<li><a href="https://static1.squarespace.com/static/5fdbb09f31d71c1227082339/t/5ff394720493bd28278889c6/1609798774687/PairingsForBeginners.pdf">Costello Pairing for Beginners</a> (pdf)</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org5da196b" class="outline-2">
+<h2 id="org5da196b">The underlying mathematics</h2>
+<div class="outline-text-2" id="text-org5da196b">
+<p>
+This section will assume comfort with the basics of Groups, Fields, and Elliptic Curves. 
+The primary mathematical tools for BLS are Bilinear Mappings and Hash Functions.
+</p>
+</div>
+
+<div id="outline-container-orgb1e49ee" class="outline-3">
+<h3 id="orgb1e49ee">Bilinear Mapping</h3>
+<div class="outline-text-3" id="text-orgb1e49ee">
+<p>
+Given a group, \(G\), of points in an elliptic curve, \(E\), over a finite field \(F_p\), a <b>bilinear mapping</b> is a function \(e : G \times G \rightarrow G_T\) which has the property that:
+</p>
+
+<p>
+\[
+e(a^m, b^n) = e(a, b)^mn = e(a^n, b^m)
+\]
+</p>
+
+<p>
+where \(a\) and \(b\) are points in the elliptic curve group \(G\). The target group \(G_T\) is just a field.
+</p>
+
+<p>
+<label for="1" class="margin-toggle">&#8853;</label><input type="checkbox" id="1" class="margin-toggle"/><span class="marginnote">Many cryptography systems rely on the fact that it is very computationally difficult to calculate solutions to the equation \(a = b^x\) in a large finite field. Because a bilinear map lets us move the exponents around freely, it erodes the protections of the discrete log which is what systems such as Diffie-Hellman key exchange rely on</span>
+A bilinear map is what defines a pairing on an elliptic curve. To unlock BLS we have to define the pairing between two elliptic curves whose points are represented by the groups \(G_1\) and \(G_2\). If we have pairings within a single elliptic curve, then our cryptography is susceptible to a discrete log attack.
+</p>
+
+<p>
+To overcome this there is a method by which we can extend the finite field \(F_q\) on which our base group is constructed to another, larger field \(F_q_2\). The simplest way to think of these groups is:
+</p>
+
+<ul class="org-ul">
+<li>\(F_q\) is small and fast, only using real numbers</li>
+<li>\(F_q2\) is big and slow, using complex numbers</li>
+</ul>
+
+<p>
+\(G_1\) is the group of points of the elliptic curve over the field \(F_q\), and \(G_2\) is the points of the curve over field \(F_q2\). We have a third field, \(F_q12\) which is what defines our target group \(G_T\).
+</p>
+
+<p>
+How these curves relate to signatures is quire simple. The key points are that:
+</p>
+
+<ul class="org-ul">
+<li>Secret keys are elements of \(G_2\)</li>
+<li>Public keys are elements of \(G_1\)</li>
+<li>Once we have generated a secret key, \(sk \in G_2\) we can find the paired point \(p = {g_1}^sk\), where \(g_1\) is the generator of \(G_1\)</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgb11ad36" class="outline-3">
+<h3 id="orgb11ad36">Hash function</h3>
+<div class="outline-text-3" id="text-orgb11ad36">
+<p>
+The blspy library performs the task of mapping a sha256 hash onto the \(G_1\) group. It is implemented in hash_to_field.py in the blspy python implementation.
+</p>
+
+<p>
+We define \(h\) as the output of a hashing function \(H\) on some message, \(m\).
+</p>
+
+<p>
+\[
+h = H(m)
+\]
+</p>
+
+<p>
+Taken together the hash function and the bilinear mapping provide the tools for building powerful signatures. 
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org122a3ac" class="outline-2">
+<h2 id="org122a3ac">BLS Signature Scheme</h2>
+<div class="outline-text-2" id="text-org122a3ac">
+<p>
+The BLS signature scheme consists of three functions: generate, sign, verify:
+</p>
+
+<dl class="org-dl">
+<dt>Key Generation</dt><dd><p>
+The key-gen algorithm selects a random integer \(\alpha\) such that \(0 < \alpha < p-1\), where (\(p\) is the order of \(G_2\)). The public key, \(pk\), is just \(g_1 ^s\). Another way to think of it is, given some public key, the secret key is just the number of times we add \(g_1\) to itself in order to arrive at the public key value.
+</p>
+
+<p>
+We have to be sure that the random integer \(\alpha\) is generated with appropriate randomness. The BLS standard defines a way to ensure this, which the chia implementation follows directly.
+</p></dd>
+
+<dt>Signing</dt><dd>Given the secret key \(sk\), and some message \(m\) (a bytestring), we compute the signature in two steps:
+<ul class="org-ul">
+<li>First hash the message and map that to a point in the field \(F_q\), that is  \(h = H(m)\).</li>
+<li>Then raise \(h\) by the secret \(sk\), so
+\[
+    sig = H(m)^sk
+    \]</li>
+</ul></dd>
+</dl>
+</div>
+
+
+<div id="outline-container-org0aeb03a" class="outline-3">
+<h3 id="org0aeb03a">Verification</h3>
+<div class="outline-text-3" id="text-org0aeb03a">
+<p>
+Once we have a signed message, we want a third party to verify it without needing the secret key. This is where we can take advantage of the bilinear map. We can supply the verifier with three things: the signed message \(sig\), the hashed message \(h\), and the public key \(pk\). These are all elements of \(G_1\), and we can use the bilinear mapping property to prove that the secret key which owns \(pk\), and the key that signed the message are the same. 
+</p>
+
+<p>
+We can make a pairing from \(h\) and \(pk\): \(e(h, pk)\). Then we have \(sig \in G_1\), which doesn't have a paired element in \(G_2\), however we can just use the generator element \(g_2\), to make \(e(sig, g_2)\).
+To verify the signature we just need to show
+</p>
+
+<p>
+\[
+e(sig, g_2) = e(h, pk)
+\]
+</p>
+
+<p>
+To see why, we can just substitute the values for \(sig\) and \(h\). [NOTE: need to clarify whether pk created by \(g_1\) or \(g_2\)]
+</p>
+
+<p>
+$$
+e(H(m)^sk, g_2) = e(H(m), g_2^sk)
+</p>
+
+<p>
+e(H(m), g_2)^sk = (H(m), g_2)^sk
+</p>
+
+<p>
+$$
+</p>
+
+<p>
+So this means we can verify the signed message without ever exposing the secret key. And since the message and the keys are contained in different groups, there are additional security protections. 
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org889c07f" class="outline-2">
+<h2 id="org889c07f">Making Signatures with Python</h2>
+<div class="outline-text-2" id="text-org889c07f">
+<p>
+In chia, everything we need is implmented in the <a href="https://github.com/Chia-Network/bls-signatures">blspy library</a>. We can refer to the code in the python_impl directory which implements all the mathematics and provides very easy classes to carry out the signature scheme.
+</p>
+
+<p>
+The actual calculation of values such as \(g_1^sk\) requires fast calculation of large exponents. To make this efficient, chia blockchain uses the Montgomery Powering Ladder [<a href="https://cr.yp.to/bib/2003/joye-ladder.pdf">PDF</a>]. There are three ways to use this: Basic, Aug and Pop. Forunately we only need to use AugSchemeMPL.
+</p>
+
+<p>
+The following code block shows how to create secret and public keys.
+</p>
+
+<pre class="code"><code>  <span style="color: #b6a0ff;">import</span> binascii
+  <span style="color: #b6a0ff;">from</span> copy <span style="color: #b6a0ff;">import</span> deepcopy
+
+  <span style="color: #b6a0ff;">from</span> blspy <span style="color: #b6a0ff;">import</span> (
+      AugSchemeMPL,
+      BasicSchemeMPL,
+      G1Element,
+      G2Element,
+      PopSchemeMPL,
+      PrivateKey,
+      Util,
+  )
+
+
+  <span style="color: #a8a8a8;"># KEYGEN</span>
+  <span style="color: #a8a8a8;">#</span>
+  <span style="color: #a8a8a8;"># This is completed in 2 steps</span>
+  <span style="color: #a8a8a8;"># 1. Calculate the private key from a given 32 byte seed</span>
+  <span style="color: #a8a8a8;"># 2. Calculate the public key from g1 - implemented as sk * G1Generator()</span>
+  <span style="color: #a8a8a8;">#</span>
+  <span style="color: #a8a8a8;"># How come pk is in G1? I thought it was g2^a which would be an element of G2. but maybe it doesn't matter.</span>
+
+
+  <span style="color: #00d3d0;">seed</span> = <span style="color: #f78fe7;">bytes</span>([0, 50, 16, 244, 124, 99, 1, 25, 52, 88, 192, 19, 18, 12, 89, 6,
+                220, 18, 102, 158, 229, 82, 12, 62, 89, 110, 182, 9, 44, 20, 254, 22])
+
+
+  <span style="color: #00d3d0;">sk</span> = BasicSchemeMPL.key_gen(seed)
+
+
+  <span style="color: #00d3d0;">pk</span> = sk.get_g1()
+
+  <span style="color: #b6a0ff;">print</span>(f<span style="color: #79a8ff;">"\nSecret Key: {sk}"</span>)
+  <span style="color: #b6a0ff;">print</span>(f<span style="color: #79a8ff;">"Public Key: </span><span style="color: #00d3d0;">{pk}</span><span style="color: #79a8ff;">"</span>)
+
+</code></pre>
+
+
+<p>
+The next code block goes into more detail - walthrough is given in comments.
+</p>
+
+
+<pre class="code"><code><span style="color: #b6a0ff;">import</span> hashlib
+<span style="color: #b6a0ff;">from</span> copy <span style="color: #b6a0ff;">import</span> deepcopy
+<span style="color: #b6a0ff;">from</span> secrets <span style="color: #b6a0ff;">import</span> token_bytes
+
+<span style="color: #b6a0ff;">from</span> chia.types.blockchain_format.sized_bytes <span style="color: #b6a0ff;">import</span> bytes32
+<span style="color: #b6a0ff;">from</span> cdv.util.load_clvm <span style="color: #b6a0ff;">import</span> load_clvm
+<span style="color: #b6a0ff;">from</span> clvm.casts <span style="color: #b6a0ff;">import</span> int_from_bytes
+
+
+<span style="color: #b6a0ff;">from</span> bls_impl.ec <span style="color: #b6a0ff;">import</span> (G1FromBytes, G1Generator, G1Infinity, G2FromBytes, G2Generator,
+              G2Infinity, JacobianPoint, default_ec, default_ec_twist,
+              sign_Fq2, twist, untwist, y_for_x)
+<span style="color: #b6a0ff;">from</span> bls_impl.fields <span style="color: #b6a0ff;">import</span> Fq, Fq2, Fq6, Fq12
+<span style="color: #b6a0ff;">from</span> bls_impl.hash_to_field <span style="color: #b6a0ff;">import</span> expand_message_xmd
+<span style="color: #b6a0ff;">from</span> bls_impl.hkdf <span style="color: #b6a0ff;">import</span> expand, extract
+<span style="color: #b6a0ff;">from</span> bls_impl.hd_keys <span style="color: #b6a0ff;">import</span> key_gen
+<span style="color: #b6a0ff;">from</span> bls_impl.op_swu_g2 <span style="color: #b6a0ff;">import</span> g2_map
+<span style="color: #b6a0ff;">from</span> bls_impl.pairing <span style="color: #b6a0ff;">import</span> ate_pairing
+<span style="color: #b6a0ff;">from</span> bls_impl.private_key <span style="color: #b6a0ff;">import</span> PrivateKey
+<span style="color: #b6a0ff;">from</span> bls_impl.schemes <span style="color: #b6a0ff;">import</span> AugSchemeMPL, BasicSchemeMPL, PopSchemeMPL
+
+<span style="color: #00d3d0;">G1Element</span> = JacobianPoint
+<span style="color: #00d3d0;">G2Element</span> = JacobianPoint
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">so lets make a signature. First make all the definitions:</span>
+
+
+<span style="color: #b6a0ff;">from</span> bls_impl.hd_keys <span style="color: #b6a0ff;">import</span> key_gen
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">The generator of G1, g1. Fast and Small (Fq) real</span>
+<span style="color: #00d3d0;">g1</span> = G1Generator()
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">print(g1)</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">The generator of G2, g2. Slow and Big (Fq2) complex</span>
+<span style="color: #00d3d0;">g2</span> = G2Generator()
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">print(g2)</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">The points at infinity for G1 and G2</span>
+<span style="color: #00d3d0;">u1</span> = G1Infinity()
+<span style="color: #00d3d0;">u2</span> = G2Infinity()
+
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">The order of all three groups (g1, g2, and gt). Note, the elliptic curve E_twist</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">actually has more valid points than this. This is relevant when hashing onto the</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">curve, where we use a point that is not in g2, and map it into g2 using the twist.</span>
+<span style="color: #00d3d0;">n</span> = 0x73EDA753299D7D483339D80809A1D80553BDA402FFFE5BFEFFFFFFFF00000001
+
+
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">We can do arithmetic with the generators:</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">print(g1 * 3)</span>
+
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">Lets generate a secret key sk and a corresponnding public key  pk.</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">sk will be an element of G2 (a 32byte? integer)</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">pk will be some point in in G1, so we can do fast arithmetic with it</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">hd_keys.key_gen will create a convenient PrivateKey object for us. To use the value of the key we just use sk.value.</span>
+
+<span style="color: #00d3d0;">seed</span> = <span style="color: #f78fe7;">bytes</span>([10] * 32)
+<span style="color: #00d3d0;">sk</span> = key_gen(seed)
+<span style="color: #00d3d0;">pk</span> = g1 * sk.value
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">note that we are able to use multiplication because the element g1 is represented as a Jacobian point. Quite technical, but it's mainly notation - we say power of inn the theory, and use * in the code.</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;"># so we can use the sk to sign hashed messages, and then use the pk to verify them.</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;"># however on point about chia puzzles is that we might often be in a situation where we want to sign the same message, but we will always get the same output. So we want to add some entropy to generate new secret keys, but in a way that the original secret can still be verified. This makes use of the bilinearity property.</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;"># we can start by just adding some integer amount to the secret key:</span>
+<span style="color: #00d3d0;">offset</span> = 1
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;"># so our new exponent that we calculate the secret key with is</span>
+<span style="color: #00d3d0;">synth_exp</span> = (sk.value + offset) % n
+
+<span style="color: #00d3d0;">new_sk</span> = PrivateKey(synth_exp)
+
+<span style="color: #00d3d0;">new_pk</span> = g1 * new_sk.value
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;"># (point_add public_key (pubkey_for_exp (sha256 public_key hidden_puzzle_hash)))</span>
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">This is how it's done in chialisp</span>
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">So now we can sign a message with the new sk, and verify it with the new pk</span>
+<span style="color: #00d3d0;">message</span> = bytes32(<span style="color: #f78fe7;">bytes</span>([11]*32))
+
+<span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(new_sk, message)
+
+
+<span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">This can now be used as the public key which we curry into our puzzles. It's important to note this becaus any coin that we create from a 'standard coin' which curries in a public key, will bbe currying a synthetic key. So for future spends, we will need to be able to use this public key, instead of the default pk of the wallet.</span>
+
+<span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">"p2_delegated_puzzle_or_hidden_puzzle.clvm"</span>, <span style="color: #79a8ff;">"clsp"</span>)
+
+
+<span style="color: #b6a0ff;">print</span>(MOD.curry(<span style="color: #f78fe7;">bytes</span>(pk)).get_tree_hash())
+<span style="color: #b6a0ff;">print</span>(MOD.curry(<span style="color: #f78fe7;">bytes</span>(new_pk)).get_tree_hash())
+
+<span style="color: #b6a0ff;">print</span>(sk)
+<span style="color: #b6a0ff;">print</span>(new_sk)
+<span style="color: #b6a0ff;">print</span>(pk)
+<span style="color: #b6a0ff;">print</span>(new_pk)
+<span style="color: #b6a0ff;">print</span>(sig
+</code></pre>
+
+
+
+
+<p>
+The next sections show several examples of puzzles and the python we need to run them
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcbfad53" class="outline-2">
+<h2 id="orgcbfad53">Using signatures in chialisp</h2>
+<div class="outline-text-2" id="text-orgcbfad53">
+<p>
+The solution that the standard transaction uses is to derive a new private key from a) the hidden puzzle and b) the public key that can sign for the delegated spend case:
+</p>
+
+<p>
+synthetic_offset == sha256(hidden_puzzle_hash + original_public_key)
+</p>
+
+<p>
+We then calculate the public key of this new private key, and add it to our existing original public key:
+</p>
+
+<p>
+synthentic_public_key == original_public_key + synthetic_offset_pubkey
+</p>
+
+<p>
+If the solver can correctly reveal BOTH the hidden puzzle and the original public key, then our puzzle can derive the synthetic public key and make sure that it matches the one that is curried in.
+</p>
+</div>
+
+
+<div id="outline-container-org4fd7371" class="outline-3">
+<h3 id="org4fd7371">Spending the standard transaction</h3>
+<div class="outline-text-3" id="text-org4fd7371">
+<p>
+This section details how we spend a standard chia coin from a standard wallet. This can all be achieved with launch_smart_coin, but is helpful to understand the process in detail.
+</p>
+
+<p>
+First define  the puzzle that we want our standard transaction to spend to. To spend the standard transaction we are sending our chia to the puzzlehash defined by this puzzle.
+</p>
+
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (MOD_HASH PUBKEY puzzle_hash amount)
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">include</span> <span style="color: #00bcff;">sha256</span>tree.clib)
+
+    (<span style="color: #00bcff;">list</span>
+      (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">AGG_SIG_ME</span> PUBKEY (<span style="color: #00bcff;">sha256</span> MOD_HASH))
+      (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span> puzzle_hash amount))
+  )
+</code></pre>
+
+<pre class="code"><code>  <span style="color: #b6a0ff;">from</span> chia.types.condition_opcodes <span style="color: #b6a0ff;">import</span> ConditionOpcode
+  <span style="color: #b6a0ff;">from</span> chia.util.condition_tools <span style="color: #b6a0ff;">import</span> conditions_dict_for_solution
+  <span style="color: #b6a0ff;">from</span> chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle <span style="color: #b6a0ff;">import</span> calculate_synthetic_offset, calculate_synthetic_public_key
+  <span style="color: #00d3d0;">GROUP_ORDER</span> = 0x73EDA753299D7D483339D80809A1D80553BDA402FFFE5BFEFFFFFFFF00000001
+
+  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span>, <span style="color: #00d3d0;">oracle</span> = asyncio.run(create_sim())
+
+
+  <span style="color: #00d3d0;">amount</span> = 100
+  <span style="color: #00d3d0;">found_coin</span> = asyncio.run(alice.choose_coin(amount))
+
+  <span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">'asm_puzzle.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+  <span style="color: #00d3d0;">new_synthetic_pk</span> = calculate_synthetic_public_key(alice.pk_, MOD.get_tree_hash())
+
+  <span style="color: #00d3d0;">cw</span> = SmartCoinWrapper(DEFAULT_CONSTANTS.GENESIS_CHALLENGE, MOD.curry(new_synthetic_pk, MOD.get_tree_hash()))
+
+  <span style="color: #00d3d0;">condition_args</span> = [[ConditionOpcode.CREATE_COIN, cw.puzzle_hash(), amount],
+                    [ConditionOpcode.CREATE_COIN, alice.puzzle_hash, found_coin.amount - amount]]
+
+  <span style="color: #00d3d0;">delegated_puzzle</span> = Program.to((1, condition_args))
+  <span style="color: #a8a8a8;"># Why does this use (1, condition_args)?</span>
+  <span style="color: #a8a8a8;"># Translated to chialisp it becomes:</span>
+  <span style="color: #a8a8a8;">#    (1 (list 51 0xcwpuzhhash amount)...)</span>
+
+  <span style="color: #a8a8a8;"># When delegated_puzzle is put through brun it returns a PROGRAM (list (list blag blah)), and when that gets run it returns the condition args.</span>
+
+  <span style="color: #a8a8a8;"># The solution to alice's standard coin (p2_delegated_puzzle_hash) is then:</span>
+
+  <span style="color: #00d3d0;">alice_puzzle_solution</span> = Program.to([[], delegated_puzzle, []])
+
+  <span style="color: #a8a8a8;"># p2_delegated_puzzle hash takes 3 args:</span>
+     <span style="color: #a8a8a8;"># 1. orginal public key, here it's () because we are using teh delegated puzzle.</span>
+     <span style="color: #a8a8a8;"># 2. delegated_puzzle, as above</span>
+     <span style="color: #a8a8a8;"># 3. delegated_puzzle_solution, which is just ()</span>
+
+
+  <span style="color: #a8a8a8;"># To sign the spend of the standard transaction we need the synthetic secret key and the message to be signed. Once spent, future coins will require a signature that is derived from the synthetic secret key.</span>
+
+  <span style="color: #a8a8a8;"># We first need to figure out what we want to sign. We will always be signing CoinSpend objects.</span>
+
+  <span style="color: #00d3d0;">coin_spend</span> = CoinSpend(found_coin.as_coin(),
+                         alice.puzzle,
+                         alice_puzzle_solution)
+
+  <span style="color: #a8a8a8;"># To work out the signature we need to know what happens when we run alice's puzzle</span>
+  <span style="color: #00d3d0;">cost</span>, <span style="color: #00d3d0;">r</span> = alice.puzzle.run_with_cost(10000000, alice_puzzle_solution)
+
+  <span style="color: #b6a0ff;">for</span> s <span style="color: #b6a0ff;">in</span> r.as_iter():
+      <span style="color: #00d3d0;">opcode</span> = ConditionOpcode(s.as_atom_list()[0])
+      <span style="color: #b6a0ff;">if</span> <span style="color: #00d3d0;">opcode</span> == <span style="color: #00d3d0;">ConditionOpcode.AGG_SIG_ME</span>:
+          <span style="color: #00d3d0;">agg_sig_pubkey</span> = s.as_atom_list()[1]
+          <span style="color: #00d3d0;">agg_sig_message</span> = s.as_atom_list()[2]
+
+  <span style="color: #b6a0ff;">print</span>(<span style="color: #79a8ff;">"\nPubkey and Message in alice_puzzle agg_sig_me:"</span>)
+  <span style="color: #b6a0ff;">print</span>(agg_sig_pubkey.hex())
+  <span style="color: #b6a0ff;">print</span>(agg_sig_message.hex())
+
+  <span style="color: #a8a8a8;"># We then organise all the conditions in r to be a dictionary with the opcodes of r as unique keys</span>
+  <span style="color: #a8a8a8;"># We can actually skip all the mucking around and jump stright to the answer with;</span>
+
+  <span style="color: #00d3d0;">s</span> = conditions_dict_for_solution(alice.puzzle, alice_puzzle_solution, 1000000)
+  <span style="color: #a8a8a8;"># This returns a tuple with (errors, conditions_dict, cost)</span>
+  <span style="color: #b6a0ff;">print</span>(s)
+
+  <span style="color: #a8a8a8;"># we can grab the agg_sig condition from the conditions dict</span>
+  <span style="color: #00d3d0;">agg_sig_cond</span> = s[1].get(ConditionOpcode.AGG_SIG_ME, [])
+
+  <span style="color: #a8a8a8;"># and get the pubblic key:</span>
+  <span style="color: #00d3d0;">pk_from_conds</span> = G1Element.from_bytes(agg_sig_cond[0].vars[0])
+
+  <span style="color: #a8a8a8;"># and the message:</span>
+  <span style="color: #00d3d0;">msg_from_conds</span> = agg_sig_cond[0].vars[1] + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+
+  <span style="color: #a8a8a8;"># We now have a public key, and a message. So we need to go from the public key to a secret key.</span>
+  <span style="color: #a8a8a8;"># To get the secret key we use calculate_synthetic_key, i think</span>
+  <span style="color: #00d3d0;">synthetic_offset</span> = calculate_synthetic_offset(<span style="color: #f78fe7;">bytes</span>(alice.pk_), DEFAULT_HIDDEN_PUZZLE_HASH)
+  <span style="color: #00d3d0;">secret_exponent</span> = <span style="color: #f78fe7;">int</span>.from_bytes(<span style="color: #f78fe7;">bytes</span>(alice.sk_), <span style="color: #79a8ff;">"big"</span>)
+
+  <span style="color: #00d3d0;">synthetic_secret_exponent</span> = (secret_exponent + synthetic_offset) % GROUP_ORDER
+  <span style="color: #00d3d0;">blob</span> = synthetic_secret_exponent.to_bytes(32, <span style="color: #79a8ff;">"big"</span>)
+  <span style="color: #00d3d0;">synthetic_secret_key</span> = PrivateKey.from_bytes(blob)
+
+  <span style="color: #b6a0ff;">print</span>(calculate_synthetic_secret_key(alice.sk_, DEFAULT_HIDDEN_PUZZLE_HASH))
+  <span style="color: #b6a0ff;">print</span>(synthetic_secret_key)
+
+  <span style="color: #a8a8a8;"># So now we know the synthetic public key that the aggsig in alice's puzzle is using:'</span>
+  <span style="color: #00d3d0;">synthetic_public_key</span> = synthetic_secret_key.get_g1()
+
+  <span style="color: #a8a8a8;"># And we can verify that it's correct by comparing to pk_from_conds</span>
+  <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">synthetic_public_key</span> == pk_from_conds
+
+  <span style="color: #a8a8a8;"># when aggsig me evaluates it uses the curried in synnthetic pubkey and the hashed message.</span>
+  <span style="color: #a8a8a8;"># The signature has to confirm the equation:</span>
+  <span style="color: #a8a8a8;"># e(sig, g2) == e(H(m), pk)</span>
+
+  <span style="color: #a8a8a8;"># the signature takes the secret key and the message. We are told that the message is the puzzle hash concatenated with the found coin name, and the additional data.</span>
+  <span style="color: #00d3d0;">msg</span> = delegated_puzzle.get_tree_hash() + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+  <span style="color: #a8a8a8;"># The important thing to note above is the value that is coming through the condition code is just delegated_puzzle.get_tree_hash(). The coin itself doesn't make use of it's name or the default constants. We have to add those in manually, and the clvm will do the same when it runs the agg_sig_me verification (i guess) </span>
+
+
+  <span style="color: #b6a0ff;">assert</span> delegated_puzzle.get_tree_hash() == bytes32(agg_sig_cond[0].vars[1])
+
+
+  <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(synthetic_secret_key, msg)
+  <span style="color: #00d3d0;">sb</span> = SpendBundle([coin_spend], sig)
+
+  <span style="color: #a8a8a8;"># We validate the signature using the spend_bundle aggregated_signature, not the raw signature. Why?</span>
+  <span style="color: #00d3d0;">validates</span> = AugSchemeMPL.aggregate_verify([synthetic_public_key], [msg], sb.aggregated_signature)
+
+  <span style="color: #b6a0ff;">if</span> <span style="color: #00d3d0;">validates</span>:
+      <span style="color: #00d3d0;">res</span> = asyncio.run(network.push_tx(sb))
+      <span style="color: #00d3d0;">new_coins</span> = [x <span style="color: #b6a0ff;">for</span> x <span style="color: #b6a0ff;">in</span> res[<span style="color: #79a8ff;">'additions'</span>] <span style="color: #b6a0ff;">if</span> x.amount == amount]
+      <span style="color: #b6a0ff;">print</span>(<span style="color: #79a8ff;">"\n New Coin Created:"</span>)
+      <span style="color: #b6a0ff;">print</span>(new_coins)
+
+  asyncio.run(destroy_sim(network))
+
+
+
+
+
+</code></pre>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgec165d9" class="outline-3">
+<h3 id="orgec165d9">Spending a custom coin</h3>
+<div class="outline-text-3" id="text-orgec165d9">
+<p>
+We now have a coin that has been spent from alices wallet to the puzzlehash given in the delegated puzzle.
+</p>
+
+
+<p>
+The actual process then, is to calculate the synthetic secret key and public key for our locking puzzle. Then curry the synthetic public key into it. Launch that as our smart coin. Then execute a spend with agg_sig_me using the synthetic keys calculated at the beginning.
+</p>
+
+<p>
+In the standard tx the synthetic offset is calculated using DEFAULT_HIDDEN_PUZZLE_HASH. What value should we be using here? Do we need to use the puzzle hash of our puzzle? What do other agg_sig_me examples use?
+</p>
+
+<pre class="code"><code>
+  <span style="color: #a8a8a8;"># so we have a coin, that has alices pk curried in and will make an agg_sig_me condition in order to spend. So to spend this one, we have to repeat everything above.</span>
+  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span>, <span style="color: #00d3d0;">oracle</span> = asyncio.run(create_sim())
+
+  <span style="color: #00d3d0;">amount</span> = 100
+  <span style="color: #00d3d0;">found_coin</span> = asyncio.run(alice.choose_coin(amount))
+
+  <span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">'asm_puzzle.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+  <span style="color: #00d3d0;">syn_sk</span> = calculate_synthetic_secret_key(alice.sk_, MOD.get_tree_hash())
+  <span style="color: #00d3d0;">syn_pk</span> = syn_sk.get_g1()
+
+  <span style="color: #00d3d0;">new_puzzle</span> = MOD.curry(MOD.get_tree_hash(), syn_pk)
+
+  <span style="color: #00d3d0;">new_solution</span> = Program.to([bob.puzzle_hash, 50])
+
+  <span style="color: #a8a8a8;">#launch smart coin</span>
+  <span style="color: #00d3d0;">new_coin</span> = asyncio.run(alice.launch_smart_coin(new_puzzle, amt=amount))
+
+
+  <span style="color: #a8a8a8;"># check values</span>
+  <span style="color: #00d3d0;">cost</span>, <span style="color: #00d3d0;">r</span> = new_puzzle.run_with_cost(10000000, new_solution)
+  <span style="color: #b6a0ff;">for</span> s <span style="color: #b6a0ff;">in</span> r.as_iter():
+      <span style="color: #00d3d0;">opcode</span> = ConditionOpcode(s.as_atom_list()[0])
+      <span style="color: #b6a0ff;">if</span> <span style="color: #00d3d0;">opcode</span> == <span style="color: #00d3d0;">ConditionOpcode.AGG_SIG_ME</span>:
+          <span style="color: #00d3d0;">agg_sig_pubkey</span> = s.as_atom_list()[1]
+          <span style="color: #00d3d0;">agg_sig_message</span> = s.as_atom_list()[2]
+
+
+  <span style="color: #b6a0ff;">print</span>(<span style="color: #79a8ff;">"\nPubkey and Message in alice_puzzle agg_sig_me:"</span>)
+  <span style="color: #b6a0ff;">print</span>(agg_sig_pubkey.hex())
+  <span style="color: #b6a0ff;">print</span>(agg_sig_message.hex())
+
+  <span style="color: #00d3d0;">s</span> = conditions_dict_for_solution(new_puzzle, new_solution, 1000000)
+
+  <span style="color: #00d3d0;">agg_sig_cond</span> = s[1].get(ConditionOpcode.AGG_SIG_ME, [])
+
+  <span style="color: #a8a8a8;"># and get the pubblic key:</span>
+  <span style="color: #00d3d0;">pk_from_conds</span> = G1Element.from_bytes(agg_sig_cond[0].vars[0])
+
+  <span style="color: #a8a8a8;"># and the message:</span>
+  <span style="color: #a8a8a8;"># msg_from_conds = agg_sig_cond[0].vars[1] + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA</span>
+
+
+  <span style="color: #00d3d0;">new_cs</span> = CoinSpend(new_coin.as_coin(), new_puzzle, new_solution)
+
+  <span style="color: #00d3d0;">msg</span> = agg_sig_cond[0].vars[1] + new_cs.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+  <span style="color: #00d3d0;">msg</span> = std_hash(MOD.get_tree_hash()) + new_cs.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+
+  <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(syn_sk, msg)
+
+  <span style="color: #00d3d0;">sb</span> = SpendBundle([new_cs], sig)
+
+  <span style="color: #00d3d0;">res</span> = asyncio.run(network.push_tx(sb))
+  <span style="color: #b6a0ff;">print</span>(res)
+  <span style="color: #b6a0ff;">print</span>(bob.balance())
+
+  asyncio.run(destroy_sim(network))
+
+</code></pre>
+
+
+<p>
+And with that we have used an aggregated signature to verify that the spender of the coin possesses the appropriate secret key.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org227cfa8" class="outline-3">
+<h3 id="org227cfa8">AggSig with self-currying pubkey</h3>
+<div class="outline-text-3" id="text-org227cfa8">
+<p>
+What we want to do is write a puzzle that perpetually keeps our coins confined to custom puzzles. We would like a ping-pong coin that can bounce between being unnlocked only by alice, or only by bob. Every time either alice or bob spends the coin, it just gets locked to the other person.
+</p>
+
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (MOD_HASH PUBKEY puzzle_hash amount)
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">include</span> <span style="color: #00bcff;">sha256</span>tree.clib)
+    (<span style="color: #00bcff;">include</span> curry_and_treehash.clib)
+
+    (<span style="color: #b6a0ff;">defun</span> recreate_coin (MOD_HASH PUBKEY puzzle_hash amount)
+      (<span style="color: #00bcff;">list</span> (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">AGG_SIG_ME</span> PUBKEY (<span style="color: #00bcff;">sha256</span> MOD_HASH))
+            (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span>
+                  (puzzle-hash-of-curried-function
+                          MOD_HASH
+                          (<span style="color: #00bcff;">sha256</span> 1 PUBKEY)
+                          (<span style="color: #00bcff;">sha256</span>tree MOD_HASH))
+                  (- amount 1))
+            (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span> puzzle_hash 1)
+      )
+    )
+
+    (recreate_coin MOD_HASH PUBKEY puzzle_hash amount)
+
+
+  )
+</code></pre>
+
+
+<pre class="code"><code>  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span>, <span style="color: #00d3d0;">oracle</span> = asyncio.run(create_sim())
+  <span style="color: #00d3d0;">amount</span> = 100
+  <span style="color: #00d3d0;">found_coin</span> = asyncio.run(alice.choose_coin(amount))
+  <span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">'pingpong.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+  <span style="color: #00d3d0;">syn_sk</span> = calculate_synthetic_secret_key(alice.sk_, MOD.get_tree_hash())
+  <span style="color: #00d3d0;">syn_pk</span> = syn_sk.get_g1()
+
+  <span style="color: #00d3d0;">new_puzzle</span> = MOD.curry(MOD.get_tree_hash(), syn_pk)
+
+  <span style="color: #00d3d0;">new_solution</span> = Program.to([bob.puzzle_hash, amount])
+
+  <span style="color: #a8a8a8;">#launch smart coin</span>
+  <span style="color: #00d3d0;">new_coin</span> = asyncio.run(alice.launch_smart_coin(new_puzzle, amt=amount))
+
+
+  <span style="color: #a8a8a8;"># spend smart coin with bob's puzzlehash</span>
+  <span style="color: #00d3d0;">cs</span> = CoinSpend(new_coin.as_coin(), new_puzzle, new_solution)
+  <span style="color: #00d3d0;">msg</span> = std_hash(MOD.get_tree_hash()) + cs.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+  <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(syn_sk, msg)
+  <span style="color: #00d3d0;">sb</span> = SpendBundle([cs], sig)
+  <span style="color: #00d3d0;">res</span> = asyncio.run(network.push_tx(sb))
+  <span style="color: #a8a8a8;"># print(res)                                </span>
+
+  <span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">pk_to_sk</span>(pk, wallet):
+      <span style="color: #b6a0ff;">return</span> wallet.sk_
+
+  <span style="color: #a8a8a8;"># Get the result coin</span>
+
+  <span style="color: #00d3d0;">coin</span> = [x <span style="color: #b6a0ff;">for</span> x <span style="color: #b6a0ff;">in</span> res[<span style="color: #79a8ff;">'additions'</span>] <span style="color: #b6a0ff;">if</span> x.amount == amount-1][0]
+
+  <span style="color: #a8a8a8;"># try to spend it</span>
+  <span style="color: #00d3d0;">coin_puzzle</span> = new_puzzle
+  <span style="color: #00d3d0;">coin_solution</span> = Program.to([oracle.puzzle_hash, amount-1])
+
+  <span style="color: #00d3d0;">cost</span>, <span style="color: #00d3d0;">r</span> = coin_puzzle.run_with_cost(10000000, coin_solution)
+  <span style="color: #b6a0ff;">for</span> s <span style="color: #b6a0ff;">in</span> r.as_iter():
+      <span style="color: #00d3d0;">opcode</span> = ConditionOpcode(s.as_atom_list()[0])
+      <span style="color: #b6a0ff;">if</span> <span style="color: #00d3d0;">opcode</span> == <span style="color: #00d3d0;">ConditionOpcode.AGG_SIG_ME</span>:
+          <span style="color: #00d3d0;">agg_sig_pubkey</span> = s.as_atom_list()[1]
+          <span style="color: #00d3d0;">agg_sig_message</span> = s.as_atom_list()[2]
+
+
+  <span style="color: #b6a0ff;">print</span>(<span style="color: #79a8ff;">"\nPubkey and Message in alice_puzzle agg_sig_me:"</span>)
+  <span style="color: #b6a0ff;">print</span>(agg_sig_pubkey.hex())
+  <span style="color: #b6a0ff;">print</span>(agg_sig_message.hex())
+
+  <span style="color: #00d3d0;">s</span> = conditions_dict_for_solution(coin_puzzle, coin_solution, 1000000)
+
+  <span style="color: #00d3d0;">agg_sig_cond</span> = s[1].get(ConditionOpcode.AGG_SIG_ME, [])
+
+  <span style="color: #a8a8a8;"># and get the pubblic key:</span>
+  <span style="color: #00d3d0;">pk_from_conds</span> = G1Element.from_bytes(agg_sig_cond[0].vars[0])
+
+  <span style="color: #00d3d0;">msg_from_conds</span> = agg_sig_cond[0].vars[1] + coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+
+  <span style="color: #00d3d0;">coin_spend</span> = CoinSpend(coin, coin_puzzle, coin_solution)
+
+  <span style="color: #00d3d0;">coin_msg</span> = std_hash(MOD.get_tree_hash()) + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+
+  <span style="color: #00d3d0;">coin_sig</span> = AugSchemeMPL.sign(syn_sk, msg_from_conds)
+  <span style="color: #00d3d0;">aggsig</span> = AugSchemeMPL.aggregate([coin_sig])
+  <span style="color: #00d3d0;">coin_sb</span> = SpendBundle([coin_spend], aggsig)
+
+
+  <span style="color: #00d3d0;">validates</span> = AugSchemeMPL.aggregate_verify([syn_pk], [coin_msg], coin_sb.aggregated_signature)
+
+  <span style="color: #00d3d0;">coin_res</span> = asyncio.run(network.push_tx(coin_sb))
+
+  <span style="color: #b6a0ff;">print</span>(coin_res)
+
+
+  <span style="color: #a8a8a8;"># we would like a simple function we can call to spend the coin.</span>
+
+  <span style="color: #b6a0ff;">async def</span> <span style="color: #feacd0;">spend_it</span>(MOD, puzzle, solution, coin, wallet):
+      <span style="color: #00d3d0;">syn_sk</span> = calculate_synthetic_secret_key(wallet.sk_, MOD.get_tree_hash())
+      <span style="color: #00d3d0;">syn_pk</span> = syn_sk.get_g1()
+      <span style="color: #00d3d0;">coin_spend</span> = CoinSpend(coin, puzzle, solution)
+      <span style="color: #00d3d0;">err</span>, <span style="color: #00d3d0;">conditions</span>, <span style="color: #00d3d0;">cost</span> = conditions_dict_for_solution(puzzle, solution, 1000000)
+      <span style="color: #00d3d0;">agg_sig_condition</span> = conditions.get(ConditionOpcode.AGG_SIG_ME, [])
+      <span style="color: #00d3d0;">pk_from_agg_sig</span> = G1Element.from_bytes(agg_sig_condition[0].vars[0])
+      <span style="color: #00d3d0;">msg_from_agg_sig</span> = agg_sig_condition[0].vars[1]
+      <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">pk_from_agg_sig</span> == syn_pk
+      <span style="color: #00d3d0;">msg_for_sig</span> = std_hash(MOD.get_tree_hash()) + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+      <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(syn_sk, msg_for_sig)
+      <span style="color: #00d3d0;">sb</span> = SpendBundle([coin_spend], sig)
+      <span style="color: #b6a0ff;">print</span>(sb.debug())
+      <span style="color: #00d3d0;">res</span> = <span style="color: #b6a0ff;">await</span> wallet.parent.push_tx(sb)
+      <span style="color: #b6a0ff;">print</span>(res)
+      <span style="color: #b6a0ff;">return</span> res
+
+
+
+  <span style="color: #00d3d0;">next_coin</span> = [x <span style="color: #b6a0ff;">for</span> x <span style="color: #b6a0ff;">in</span> coin_res[<span style="color: #79a8ff;">'additions'</span>] <span style="color: #b6a0ff;">if</span> x.amount == amount-2][0]
+  <span style="color: #00d3d0;">new_coin_sol</span> = Program.to([bob.puzzle_hash, amount-2])
+  asyncio.run(spend_it(MOD, coin_puzzle, new_coin_sol, next_coin, alice))
+
+  asyncio.run(destroy_sim(network))
+</code></pre>
+</div>
+</div>
+
+<div id="outline-container-orgb379873" class="outline-3">
+<h3 id="orgb379873">AggSig with changing pubkey</h3>
+<div class="outline-text-3" id="text-orgb379873">
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (MOD_HASH PUBKEY new_pubkey puzzle_hash amount)
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">include</span> <span style="color: #00bcff;">sha256</span>tree.clib)
+    (<span style="color: #00bcff;">include</span> curry_and_treehash.clib)
+
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Need some function here to calculate synthetic pk of new_pubkey</span>
+
+    (<span style="color: #b6a0ff;">defun</span> recreate_coin (MOD_HASH PUBKEY new_pubkey puzzle_hash amount)
+      (<span style="color: #00bcff;">list</span> (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">AGG_SIG_ME</span> PUBKEY (<span style="color: #00bcff;">sha256</span> MOD_HASH))
+            (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span>
+                  (puzzle-hash-of-curried-function
+                          MOD_HASH
+                          (<span style="color: #00bcff;">sha256</span> 1 new_pubkey)
+                          (<span style="color: #00bcff;">sha256</span>tree MOD_HASH))
+                  (- amount 1))
+            (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span> puzzle_hash 1)
+      )
+    )
+
+    (recreate_coin MOD_HASH PUBKEY new_pubkey puzzle_hash amount)
+
+
+  )
+</code></pre>
+
+
+<pre class="code"><code>  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span>, <span style="color: #00d3d0;">oracle</span> = asyncio.run(create_sim())
+  <span style="color: #00d3d0;">amount</span> = 100
+  <span style="color: #00d3d0;">found_coin</span> = asyncio.run(alice.choose_coin(amount))
+  <span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">'pingpong_2.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+  <span style="color: #00d3d0;">syn_sk</span> = calculate_synthetic_secret_key(alice.sk_, MOD.get_tree_hash())
+  <span style="color: #00d3d0;">syn_pk</span> = syn_sk.get_g1()
+
+  <span style="color: #00d3d0;">puzzle</span> = MOD.curry(MOD.get_tree_hash(), syn_pk)
+
+  <span style="color: #a8a8a8;">#launch smart coin</span>
+  <span style="color: #00d3d0;">coin_1</span> = asyncio.run(alice.launch_smart_coin(puzzle, amt=amount))
+
+  <span style="color: #a8a8a8;"># we would like a simple function we can call to spend the coin.</span>
+
+  <span style="color: #b6a0ff;">async def</span> <span style="color: #feacd0;">first_spend</span>(spender, coin, puzzle, solution):
+      <span style="color: #00d3d0;">syn_sk</span> = calculate_synthetic_secret_key(spender.sk_, MOD.get_tree_hash())
+      <span style="color: #00d3d0;">syn_pk</span> = syn_sk.get_g1()
+      <span style="color: #00d3d0;">coin_spend</span> = CoinSpend(coin, puzzle, solution)
+      <span style="color: #00d3d0;">err</span>, <span style="color: #00d3d0;">conditions</span>, <span style="color: #00d3d0;">cost</span> = conditions_dict_for_solution(puzzle, solution, 1000000)
+      <span style="color: #00d3d0;">agg_sig_condition</span> = conditions.get(ConditionOpcode.AGG_SIG_ME, [])
+      <span style="color: #00d3d0;">pk_from_agg_sig</span> = G1Element.from_bytes(agg_sig_condition[0].vars[0])
+      <span style="color: #00d3d0;">msg_from_agg_sig</span> = agg_sig_condition[0].vars[1]
+      <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">pk_from_agg_sig</span> == syn_pk
+      <span style="color: #00d3d0;">msg_for_sig</span> = std_hash(MOD.get_tree_hash()) + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+      <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(syn_sk, msg_for_sig)
+      <span style="color: #00d3d0;">sb</span> = SpendBundle([coin_spend], sig)
+      <span style="color: #a8a8a8;"># print(sb.debug())</span>
+      <span style="color: #00d3d0;">res</span> = <span style="color: #b6a0ff;">await</span> spender.parent.push_tx(sb)
+      <span style="color: #a8a8a8;"># print(res)</span>
+      <span style="color: #b6a0ff;">return</span> res
+
+
+  <span style="color: #b6a0ff;">async def</span> <span style="color: #feacd0;">spend_it</span>(spender, coin, puzzle, solution):
+      <span style="color: #00d3d0;">coin_spend</span> = CoinSpend(coin, puzzle, solution)
+      <span style="color: #00d3d0;">msg</span> = std_hash(MOD.get_tree_hash()) + coin_spend.coin.name() + DEFAULT_CONSTANTS.AGG_SIG_ME_ADDITIONAL_DATA
+      <span style="color: #00d3d0;">sig</span> = AugSchemeMPL.sign(spender.sk_, msg)
+      <span style="color: #00d3d0;">sb</span> = SpendBundle([coin_spend], sig)
+      <span style="color: #00d3d0;">res</span> = <span style="color: #b6a0ff;">await</span> spender.parent.push_tx(sb)
+      <span style="color: #b6a0ff;">return</span> res
+
+  <span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">get_next_puz_and_sol</span>(source, target, amount):
+      <span style="color: #00d3d0;">puz</span> = MOD.curry(MOD.get_tree_hash(), source.pk_)
+      <span style="color: #00d3d0;">sol</span> = Program.to([target.pk_, target.puzzle_hash, amount])
+      <span style="color: #b6a0ff;">return</span> puz, sol
+
+
+
+  <span style="color: #a8a8a8;"># FIRST SPEND</span>
+  <span style="color: #a8a8a8;"># ALICE -&gt; BOB</span>
+  <span style="color: #a8a8a8;"># We do this one manually since we have to get the synthetic key as used by the standard launcher.</span>
+  <span style="color: #00d3d0;">puz_1</span> = MOD.curry(MOD.get_tree_hash(), syn_pk)
+  <span style="color: #00d3d0;">sol_1</span> = Program.to([bob.pk_, bob.puzzle_hash, amount])
+  <span style="color: #00d3d0;">res_1</span> = asyncio.run(first_spend(alice, coin_1.as_coin(), puz_1, sol_1))
+  <span style="color: #00d3d0;">coin</span> =  [x <span style="color: #b6a0ff;">for</span> x <span style="color: #b6a0ff;">in</span> res_1[<span style="color: #79a8ff;">'additions'</span>] <span style="color: #b6a0ff;">if</span> x.amount == amount-1][0]
+
+  <span style="color: #a8a8a8;"># SUBSEQUENT SPENDS</span>
+  <span style="color: #a8a8a8;"># ALTERNATE TARGET and SOURCE</span>
+  <span style="color: #00d3d0;">wallets</span> = [alice, bob]
+  <span style="color: #b6a0ff;">for</span> x <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span>(2, 20):
+      <span style="color: #00d3d0;">idx_source</span> = (x-1) % <span style="color: #f78fe7;">len</span>(wallets)
+      <span style="color: #00d3d0;">idx_target</span> = (x) % <span style="color: #f78fe7;">len</span>(wallets)
+      <span style="color: #00d3d0;">puz</span>, <span style="color: #00d3d0;">sol</span> = get_next_puz_and_sol(wallets[idx_source], wallets[idx_target], amount-x+1)
+      <span style="color: #00d3d0;">res</span> = asyncio.run(spend_it(wallets[idx_source], coin, puz, sol))
+      <span style="color: #00d3d0;">coin</span> = [c <span style="color: #b6a0ff;">for</span> c <span style="color: #b6a0ff;">in</span> res[<span style="color: #79a8ff;">'additions'</span>] <span style="color: #b6a0ff;">if</span> c.amount == amount-x][0]
+      <span style="color: #b6a0ff;">print</span>(res)
+
+
+  asyncio.run(destroy_sim(network))
+</code></pre>
+</div>
+</div>
+</div>
+</article>
+<div id="postamble" class="status">
+<p class="author">Author: Geoff Walmsley</p>
+<p class="date">Created: 2021-11-03 Wed 20:11</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

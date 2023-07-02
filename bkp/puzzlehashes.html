@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-11-03 Wed 20:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Puzzlehash</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Geoff Walmsley" />
+<meta name="description" content="Index of aggsig.me"
+ />
+<meta name="keywords" content="Chia, Chialisp, Chialisp Tutorials, Chialisp Examples" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="./css/tufte.css" />
+<style type="text/css">#content{max-width: 800px}</style>
+<style type="text/css">.title{text-align: left;}</style>
+<style type="text/css">pre.code{background-color: #111; color: #fff} pre > code{width: 100%; margin-left: 0px;}</style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<article id="content">
+<h1 class="title">Puzzlehash</h1>
+<p>
+This is a set of experiments aimed at discovering how to exactly match chialisp-created puzzlehashes with python-created puzzlehashes.
+</p>
+
+<p>
+The reason for this sub-project is because when developing tic-tac-toe, the coin-spends appeared to be generated puzzlehashes that didn't match what I expected. Helpfully, <b><code>@arty</code></b> on keybase pointed me to his chia-checkers project which showed me the way.
+</p>
+
+<p>
+My problem was that the signature used in default coins is a synthetic one, and so we need to make sure to use the right public key when creating new puzzles.
+</p>
+
+<div id="outline-container-org49c8573" class="outline-2">
+<h2 id="org49c8573">chia-checkers (by @arty)</h2>
+<div class="outline-text-2" id="text-org49c8573">
+<ul class="org-ul">
+<li><a href="https://github.com/prozacchiwawa/chia-checkers">Link to the repo</a></li>
+<li>driver.py defines a CheckersMover class which takes care of calculating puzzlehashes of the inner_puzzle as it changes according to the curried values of each move.</li>
+<li>It needs to include the launcher coin id.</li>
+<li>When the class performs a move it creates a current_puzzle from the inner_puzzle and the board information, and calls run_program from clvm.run_program. (not sure how run_program differs from Program.run()).</li>
+<li><p>
+Within the driver there is also a check on the expected puzzle hash.
+</p>
+
+<p>
+make_move function from chia-checkers driver.py
+</p>
+<pre class="code"><code>     <span style="color: #b6a0ff;">async def</span> <span style="color: #feacd0;">make_move</span>(<span style="color: #b6a0ff;">self</span>,fromX,fromY,toX,toY):
+            <span style="color: #00d3d0;">move</span> = make_move_sexp(fromX,fromY,toX,toY)
+            <span style="color: #00d3d0;">maybeMove</span> = SExp.to(move).cons(SExp.to([]))
+
+            <span style="color: #00d3d0;">current_puzzle</span> = <span style="color: #b6a0ff;">self</span>.inner_puzzle_code.curry(
+                <span style="color: #b6a0ff;">self</span>.inner_puzzle_code.get_tree_hash(),
+                <span style="color: #b6a0ff;">self</span>.launch_coin.name(), <span style="color: #a8a8a8;"># Launcher</span>
+                <span style="color: #b6a0ff;">self</span>.black.pk(),
+                <span style="color: #b6a0ff;">self</span>.red.pk(),
+                <span style="color: #b6a0ff;">self</span>.black.puzzle_hash,
+                <span style="color: #b6a0ff;">self</span>.red.puzzle_hash,
+                GAME_MOJO,
+                SExp.to(<span style="color: #b6a0ff;">self</span>.board)
+            )
+
+            <span style="color: #00d3d0;">simArgs</span> = SExp.to([<span style="color: #79a8ff;">"simulate"</span>, maybeMove, []])
+            <span style="color: #00d3d0;">cost</span>, <span style="color: #00d3d0;">result</span> = run_program(
+                current_puzzle,
+                simArgs,
+                OPERATOR_LOOKUP
+            )
+
+            <span style="color: #00d3d0;">expectedPuzzleHash</span> = bytes32(result.first().as_python())
+            <span style="color: #00d3d0;">after_move_puzzle</span> = <span style="color: #b6a0ff;">self</span>.inner_puzzle_code.curry(
+                <span style="color: #b6a0ff;">self</span>.inner_puzzle_code.get_tree_hash(),
+                <span style="color: #b6a0ff;">self</span>.launch_coin.name(), <span style="color: #a8a8a8;"># Launcher</span>
+                <span style="color: #b6a0ff;">self</span>.black.pk(),
+                <span style="color: #b6a0ff;">self</span>.red.pk(),
+                <span style="color: #b6a0ff;">self</span>.black.puzzle_hash,
+                <span style="color: #b6a0ff;">self</span>.red.puzzle_hash,
+                GAME_MOJO,
+                result.rest(),
+            )
+            <span style="color: #b6a0ff;">assert</span> after_move_puzzle.get_tree_hash() == expectedPuzzleHash
+</code></pre></li>
+</ul>
+
+
+<ul class="org-ul">
+<li>They key part of the above is using run_program, which constructs <code>current_puzzle.run(simArgs)</code>.</li>
+<li>Using the result from Program.run() we can dig into the condition codes being returned from the the puzzle and solution.</li>
+<li>WE can then use that information to make sure we are passing in the right values for our solution.</li>
+<li>Need to make use of the expectedPuzzleHash value in checking that we can recreate the exact puzzlehash in both python and chialisp.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org355ac99" class="outline-2">
+<h2 id="org355ac99">Launching a basic inner_puzzle</h2>
+<div class="outline-text-2" id="text-org355ac99">
+<p>
+We will use the following chialisp as our puzzle that we will spend to:
+</p>
+
+<p>
+<code>ph_basic_inner.clsp</code>
+</p>
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (PUZZLEHASH amount)
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">list</span> (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span> PUZZLEHASH amount))
+  )
+</code></pre>
+
+<p>
+This puzzle just takes a puzzle hash and pays 100 mojo to it.
+We want to launch this coin from a simulated network wallet (alice), and retrieve a puzzle hash for it. We should also be able to predict what the new puzzlehash will be based on the launcher coin we use during creation.
+</p>
+
+<p>
+So first we have to define a launcher that creates the "smart" coin from a regular farmed coin.
+</p>
+
+<pre class="code"><code>  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">oracle</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span> = asyncio.run(create_sim())
+  network.farm_block(farmer=alice)
+  <span style="color: #00d3d0;">start_amt</span> = 1000
+  <span style="color: #00d3d0;">launch_coin</span> = asyncio.run(alice.choose_coin(start_amt))
+
+
+  <span style="color: #00d3d0;">INNER_PUZZLE</span> = load_clvm(<span style="color: #79a8ff;">'ph_basic_inner.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+  <span style="color: #00d3d0;">first_coin</span> = asyncio.run(alice.launch_smart_coin(INNER_PUZZLE.curry(bob.puzzle_hash),
+                                            amt=start_amt,
+                                            launcher=launch_coin))
+
+  <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">first_coin.puzzle_hash</span> == INNER_PUZZLE.curry(bob.puzzle_hash).get_tree_hash()
+
+  asyncio.run(destroy_sim(network))
+</code></pre>
+
+<p>
+In this case we can determine the resulting puzzlehash of first_coin as just the treehash of the inner puzzle. This is because the inner puzzle does not have curried values, and does not recreate.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb382f77" class="outline-2">
+<h2 id="orgb382f77">Inner puzzle with recreation</h2>
+<div class="outline-text-2" id="text-orgb382f77">
+<p>
+We now want to launch an inner puzzle that recreates itself.
+</p>
+
+<p>
+<code>ph_recreate_inner.clsp</code>
+</p>
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (MOD_HASH LAUNCHER PUZZLEHASH amount)
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">include</span> <span style="color: #00bcff;">sha256</span>tree.clib)
+    (<span style="color: #00bcff;">include</span> curry_and_treehash.clib)
+
+    (<span style="color: #b6a0ff;">defun</span> recreate_coin (MOD_HASH LAUNCHER PUZZLEHASH amount)
+      (<span style="color: #00bcff;">list</span> (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span>
+                  (puzzle-hash-of-curried-function
+                            MOD_HASH
+                            (<span style="color: #00bcff;">sha256</span>tree PUZZLEHASH)
+                            (<span style="color: #00bcff;">sha256</span>tree LAUNCHER)
+                            (<span style="color: #00bcff;">sha256</span>tree MOD_HASH))
+                  amount))
+    )
+
+    (recreate_coin MOD_HASH LAUNCHER PUZZLEHASH amount)
+
+  )
+</code></pre>
+
+
+
+<pre class="code"><code>  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">oracle</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span> = asyncio.run(create_sim())
+  network.farm_block(farmer=alice)
+  <span style="color: #00d3d0;">start_amt</span> = 1000
+  <span style="color: #00d3d0;">launch_coin</span> = asyncio.run(alice.choose_coin(start_amt))
+
+
+  <span style="color: #00d3d0;">INNER_PUZZLE</span> = load_clvm(<span style="color: #79a8ff;">'ph_recreate_inner.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+  <span style="color: #00d3d0;">CURRIED_INNER_PUZZLE</span> = INNER_PUZZLE.curry(INNER_PUZZLE.get_tree_hash(),
+                                            launch_coin.name(),
+                                            bob.puzzle_hash)
+
+  <span style="color: #00d3d0;">first_coin</span> = asyncio.run(alice.launch_smart_coin(CURRIED_INNER_PUZZLE,
+                                                   amt=start_amt,
+                                                   launcher=launch_coin))
+
+  <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">first_coin.puzzle_hash</span> == CURRIED_INNER_PUZZLE.get_tree_hash()
+
+
+  <span style="color: #a8a8a8;"># At this point we have launched a smart coin from alice's wallet</span>
+  <span style="color: #a8a8a8;"># The puzzlehash of the launched coin is equal to the tree hash of</span>
+  <span style="color: #a8a8a8;"># CURRIED_INNER_PUZZLE.</span>
+
+  <span style="color: #a8a8a8;"># The next step is for someone to spend this coin and see what comes out.</span>
+  <span style="color: #a8a8a8;"># To spend it they just need to pass a solution consisting of an amount (less than start_amt)</span>
+  <span style="color: #00d3d0;">sol</span> = Program.to([100])
+
+
+  <span style="color: #a8a8a8;"># we can recreate the inner_puzzle that is held in first_coin:</span>
+  <span style="color: #00d3d0;">current_puzzle</span> = INNER_PUZZLE.curry(INNER_PUZZLE.get_tree_hash(),
+                     launch_coin.name(),
+                     bob.puzzle_hash)
+
+  <span style="color: #00d3d0;">sim_sol</span> = SExp.to([100])
+
+  <span style="color: #00d3d0;">cost</span>, <span style="color: #00d3d0;">result</span> = run_program(current_puzzle, sim_sol, OPERATOR_LOOKUP)
+
+  <span style="color: #00d3d0;">expected_puzzlehash</span> = bytes32(result.first().as_python()[1])
+
+  <span style="color: #b6a0ff;">assert</span> <span style="color: #00d3d0;">expected_puzzlehash</span> == current_puzzle.get_tree_hash()
+
+
+
+  <span style="color: #a8a8a8;"># asyncio.run(destroy_sim(network))</span>
+</code></pre>
+</div>
+</div>
+
+
+<div id="outline-container-orge098060" class="outline-2">
+<h2 id="orge098060">Make a chialisp puzzle that outputs a puzzlehash from an inner-puzzle</h2>
+<div class="outline-text-2" id="text-orge098060">
+<p>
+To make a puzzlehash from an inner puzzle we use the curry_and_treehash.clib file.
+</p>
+
+<p>
+The source below makes use of a :solution tag which links to a file that we want to act as the inner puzzle. To run this puzzle with the solution use the function gemacs/run-and-brun-with-solution, bound to C-c 
+</p>
+</div>
+
+
+
+<div id="outline-container-org50fbf4c" class="outline-3">
+<h3 id="org50fbf4c">First example: Calculate simple inner puzzle hash with no currying</h3>
+<div class="outline-text-3" id="text-org50fbf4c">
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> ()
+    (<span style="color: #00bcff;">include</span> condition_codes.clib)
+    (<span style="color: #00bcff;">list</span> (<span style="color: #00bcff;">list</span> <span style="color: #00d3d0;">CREATE_COIN</span> 0x0fedbeef 100))
+  )
+</code></pre>
+
+<p>
+We can run and brun (C-c x) this source block, providing a puzzlehash as a solution.
+</p>
+
+<p>
+#+RESULTS
+"(a (q 4 (c 2 (c 5 (q 100))) ()) (c (q . 51) 1))
+"
+</p>
+
+<p>
+"(0x0fedbeef)"
+</p>
+
+<p>
+"((51 0x0fedbeef 100))
+"
+</p>
+
+
+<p>
+To obtain the puzzlehash of this function, we can run print-puzhash.clsp with phc_1 as the value for INNER_PUZZLE.
+</p>
+
+<pre class="code"><code>  (<span style="color: #b6a0ff;">mod</span> (INNER_PUZZLE)
+    (<span style="color: #00bcff;">include</span> curry_and_treehash.clib)
+    (<span style="color: #00bcff;">include</span> <span style="color: #00bcff;">sha256</span>tree.clib)
+
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(puzzle-hash-of-curried-function INNER_PUZZLE)</span>
+    (<span style="color: #00bcff;">sha256</span>tree INNER_PUZZLE)
+  )
+</code></pre>
+
+<p>
+Running this (C-c f) produces a puzzle hash for the phc_1.clsp puzzle:
+</p>
+
+<p>
+0x343406adc749b7e8190f21392a7bcbd24ab97a45f54b620c0c5bcde269df02f8
+</p>
+
+
+<p>
+Since it doesn't have any values curried in it should be simple to get the same result from python. 
+</p>
+
+<pre class="code"><code>  <span style="color: #a8a8a8;"># Setup simulator:</span>
+  <span style="color: #00d3d0;">network</span>, <span style="color: #00d3d0;">oracle</span>, <span style="color: #00d3d0;">alice</span>, <span style="color: #00d3d0;">bob</span> = asyncio.run(create_sim())
+
+
+  <span style="color: #00d3d0;">MOD</span> = load_clvm(<span style="color: #79a8ff;">'print-puzhash.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+  <span style="color: #00d3d0;">INNER_PUZZLE</span> = load_clvm(<span style="color: #79a8ff;">'phc_1.clsp'</span>, <span style="color: #79a8ff;">'clsp'</span>)
+
+
+  <span style="color: #b6a0ff;">print</span>(MOD.run(INNER_PUZZLE).get_tree_hash())
+  <span style="color: #b6a0ff;">print</span>(INNER_PUZZLE.get_tree_hash())
+
+  asyncio.run(destroy_sim(network))
+
+</code></pre>
+</div>
+</div>
+</div>
+</article>
+<div id="postamble" class="status">
+<p class="author">Author: Geoff Walmsley</p>
+<p class="date">Created: 2021-11-03 Wed 20:11</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
