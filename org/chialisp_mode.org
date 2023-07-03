@@ -1,0 +1,44 @@
+#+TITLE: Chialisp Mode
+#+description: Writing chialisp in emacs
+#+keywords: Chia, Chialisp, Chialisp Emacs
+
+
+I think I'm the only person that writes chialisp in emacs, and this is how I get basic code highlighting. It's far from perfect, but it suits my purposes for now. I've recently updated it to include new condition codes, and fix a few things like "list" being highlighted even when it's part of a variable name like "my_list". The main limitation now is that commented code is still highlighted, and indentation can be a bit (very) wonky.
+
+#+begin_src emacs-lisp
+  (defvar chialisp-functions
+    '("+" "-" "*" "/" "divmod" "=" ">" ">s" "not" "all" "any" "if" "i" "x" "qq" "unquote" "q" "a" "@" "f" "r" "c" "l" "sha256" "sha256tree" "concat" "strlen" "substr" "logand" "logior" "logxor" "lognot" "ash"  "lsh" "point_add" "pubkey_for_exp" "softfork" "list"))
+  (defvar chialisp-builtins '("mod" "defun" "defun-inline" "defmacro" "defconstant" "include" "lambda" "defconst" "defmac"))
+  (defvar chialisp-conditions '("REMARK" "AGG_SIG_UNSAFE" "AGG_SIG_ME" "CREATE_COIN" "RESERVE_FEE" "CREATE_COIN_ANNOUNCEMENT" "ASSERT_COIN_ANNOUNCEMENT" "CREATE_PUZZLE_ANNOUNCEMENT" "ASSERT_PUZZLE_ANNOUNCEMENT" "ASSERT_MY_COIN_ID" "ASSERT_MY_PARENT_ID" "ASSERT_MY_PUZZLEHASH" "ASSERT_MY_AMOUNT" "ASSERT_SECONDS_RELATIVE" "ASSERT_SECONDS_ABSOLUTE" "ASSERT_HEIGHT_RELATIVE" "ASSERT_HEIGHT_ABSOLUTE" "ASSERT_CONCURRENT_SPEND" "ASSERT_CONCURRENT_PUZZLE" "ASSERT_MY_BIRTH_SECONDS" "ASSERT_MY_BIRTH_HEIGHT" "ASSERT_EPHEMERAL" "ASSERT_BEFORE_SECONDS_RELATIVE" "ASSERT_BEFORE_SECONDS_ABSOLUTE" "ASSERT_BEFORE_HEIGHT_RELATIVE" "ASSERT_BEFORE_HEIGHT_ABSOLUTE"))
+
+  (defvar chialisp-font-lock-keywords
+    (let ((keywords-regexp (concat "(\\(" (mapconcat 'identity chialisp-functions "\\|") "\\)\\>")))
+      `((,keywords-regexp 1 'font-lock-function-name-face t)
+        (,(regexp-opt chialisp-builtins 'words) . font-lock-builtin-face)
+        (,(regexp-opt chialisp-conditions 'words) . font-lock-variable-name-face)
+        )))
+
+
+  (define-derived-mode chialisp-mode emacs-lisp-mode "Chialisp"
+    "Major mode for editing chialisp files."
+    (setq-local font-lock-defaults '(chialisp-font-lock-keywords)))
+
+  (add-to-list 'auto-mode-alist '("\\(?:cl\\(?:ib\\|sp\\|vm\\)\\)" . chialisp-mode))
+
+  (provide 'chialisp-mode)
+  
+#+end_src
+
+
+This produces code that looks something like this:
+
+#+begin_src chialisp
+  (if my_id
+    (c (list ASSERT_MY_PUZZLEHASH (wrap_in_cat_layer CAT_MOD_HASH CAT_TAIL_HASH my_inner_puzhash))
+      (c
+        (list ASSERT_MY_AMOUNT my_amount)
+        conditions
+      )
+    )
+  )
+#+end_src

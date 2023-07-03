@@ -10,3 +10,4 @@ You can find out more about me in the [[file:about.org::*Contact Links][about]] 
 
 - [[file:lists.org][List destructuring with @]]
 - [[file:offers.org][A technical guide to offers]]
+- [[file:chialisp_mode.org][Chialisp Mode for emacs]]

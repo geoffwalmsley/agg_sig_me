@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="agg_sig_me">
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<style type="text/css">.figure {width: 55%; vertical-align: baseline;}</style></head>
+<body>
+<div id="body"><div id="container"><div id="navigation"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="uses_this.html">Uses This</a></div><div id="content"><article><h1 class="title">Chialisp Mode</h1>
+<section><p>
+I think I'm the only person that writes chialisp in emacs, and this is how I get basic code highlighting. It's far from perfect, but it suits my purposes for now. I've recently updated it to include new condition codes, and fix a few things like "list" being highlighted even when it's part of a variable name like "my_list". The main limitation now is that commented code is still highlighted, and indentation can be a bit (very) wonky.
+</p>
+
+<pre class="code"><code>(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">chialisp-functions</span>
+  '(<span style="color: #79a8ff;">"+"</span> <span style="color: #79a8ff;">"-"</span> <span style="color: #79a8ff;">"*"</span> <span style="color: #79a8ff;">"/"</span> <span style="color: #79a8ff;">"divmod"</span> <span style="color: #79a8ff;">"="</span> <span style="color: #79a8ff;">"&gt;"</span> <span style="color: #79a8ff;">"&gt;s"</span> <span style="color: #79a8ff;">"not"</span> <span style="color: #79a8ff;">"all"</span> <span style="color: #79a8ff;">"any"</span> <span style="color: #79a8ff;">"if"</span> <span style="color: #79a8ff;">"i"</span> <span style="color: #79a8ff;">"x"</span> <span style="color: #79a8ff;">"qq"</span> <span style="color: #79a8ff;">"unquote"</span> <span style="color: #79a8ff;">"q"</span> <span style="color: #79a8ff;">"a"</span> <span style="color: #79a8ff;">"@"</span> <span style="color: #79a8ff;">"f"</span> <span style="color: #79a8ff;">"r"</span> <span style="color: #79a8ff;">"c"</span> <span style="color: #79a8ff;">"l"</span> <span style="color: #79a8ff;">"sha256"</span> <span style="color: #79a8ff;">"sha256tree"</span> <span style="color: #79a8ff;">"concat"</span> <span style="color: #79a8ff;">"strlen"</span> <span style="color: #79a8ff;">"substr"</span> <span style="color: #79a8ff;">"logand"</span> <span style="color: #79a8ff;">"logior"</span> <span style="color: #79a8ff;">"logxor"</span> <span style="color: #79a8ff;">"lognot"</span> <span style="color: #79a8ff;">"ash"</span>  <span style="color: #79a8ff;">"lsh"</span> <span style="color: #79a8ff;">"point_add"</span> <span style="color: #79a8ff;">"pubkey_for_exp"</span> <span style="color: #79a8ff;">"softfork"</span> <span style="color: #79a8ff;">"list"</span>))
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">chialisp-builtins</span> '(<span style="color: #79a8ff;">"mod"</span> <span style="color: #79a8ff;">"defun"</span> <span style="color: #79a8ff;">"defun-inline"</span> <span style="color: #79a8ff;">"defmacro"</span> <span style="color: #79a8ff;">"defconstant"</span> <span style="color: #79a8ff;">"include"</span> <span style="color: #79a8ff;">"lambda"</span> <span style="color: #79a8ff;">"defconst"</span> <span style="color: #79a8ff;">"defmac"</span>))
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">chialisp-conditions</span> '(<span style="color: #79a8ff;">"REMARK"</span> <span style="color: #79a8ff;">"AGG_SIG_UNSAFE"</span> <span style="color: #79a8ff;">"AGG_SIG_ME"</span> <span style="color: #79a8ff;">"CREATE_COIN"</span> <span style="color: #79a8ff;">"RESERVE_FEE"</span> <span style="color: #79a8ff;">"CREATE_COIN_ANNOUNCEMENT"</span> <span style="color: #79a8ff;">"ASSERT_COIN_ANNOUNCEMENT"</span> <span style="color: #79a8ff;">"CREATE_PUZZLE_ANNOUNCEMENT"</span> <span style="color: #79a8ff;">"ASSERT_PUZZLE_ANNOUNCEMENT"</span> <span style="color: #79a8ff;">"ASSERT_MY_COIN_ID"</span> <span style="color: #79a8ff;">"ASSERT_MY_PARENT_ID"</span> <span style="color: #79a8ff;">"ASSERT_MY_PUZZLEHASH"</span> <span style="color: #79a8ff;">"ASSERT_MY_AMOUNT"</span> <span style="color: #79a8ff;">"ASSERT_SECONDS_RELATIVE"</span> <span style="color: #79a8ff;">"ASSERT_SECONDS_ABSOLUTE"</span> <span style="color: #79a8ff;">"ASSERT_HEIGHT_RELATIVE"</span> <span style="color: #79a8ff;">"ASSERT_HEIGHT_ABSOLUTE"</span> <span style="color: #79a8ff;">"ASSERT_CONCURRENT_SPEND"</span> <span style="color: #79a8ff;">"ASSERT_CONCURRENT_PUZZLE"</span> <span style="color: #79a8ff;">"ASSERT_MY_BIRTH_SECONDS"</span> <span style="color: #79a8ff;">"ASSERT_MY_BIRTH_HEIGHT"</span> <span style="color: #79a8ff;">"ASSERT_EPHEMERAL"</span> <span style="color: #79a8ff;">"ASSERT_BEFORE_SECONDS_RELATIVE"</span> <span style="color: #79a8ff;">"ASSERT_BEFORE_SECONDS_ABSOLUTE"</span> <span style="color: #79a8ff;">"ASSERT_BEFORE_HEIGHT_RELATIVE"</span> <span style="color: #79a8ff;">"ASSERT_BEFORE_HEIGHT_ABSOLUTE"</span>))
+
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">chialisp-font-lock-keywords</span>
+  (<span style="color: #b6a0ff;">let</span> ((keywords-regexp (concat <span style="color: #79a8ff;">"(</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">(</span><span style="color: #79a8ff;">"</span> (mapconcat 'identity chialisp-functions <span style="color: #79a8ff;">"</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">|</span><span style="color: #79a8ff;">"</span>) <span style="color: #79a8ff;">"</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">)</span><span style="color: #79a8ff;">\\&gt;"</span>)))
+    `((,keywords-regexp 1 'font-lock-function-name-face t)
+      (,(regexp-opt chialisp-builtins 'words) . font-lock-builtin-face)
+      (,(regexp-opt chialisp-conditions 'words) . font-lock-variable-name-face)
+      )))
+
+
+(<span style="color: #b6a0ff;">define-derived-mode</span> <span style="color: #feacd0;">chialisp-mode</span> emacs-lisp-mode <span style="color: #79a8ff;">"Chialisp"</span>
+  <span style="color: #9ac8e0;">"Major mode for editing chialisp files."</span>
+  (<span style="color: #b6a0ff;">setq-local</span> font-lock-defaults '(chialisp-font-lock-keywords)))
+
+(add-to-list 'auto-mode-alist '(<span style="color: #79a8ff;">"</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">(?:</span><span style="color: #79a8ff;">cl</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">(?:</span><span style="color: #79a8ff;">ib</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">|</span><span style="color: #79a8ff;">sp</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">|</span><span style="color: #79a8ff;">vm</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">)</span><span style="color: #feacd0;">\\</span><span style="color: #00c06f;">)</span><span style="color: #79a8ff;">"</span> . chialisp-mode))
+
+(<span style="color: #b6a0ff;">provide</span> '<span style="color: #00bcff;">chialisp-mode</span>)
+
+</code></pre>
+
+
+<p>
+This produces code that looks something like this:
+</p>
+
+<pre class="code"><code>(<span style="color: #feacd0;">if</span> my_id
+  (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">list</span> <span style="color: #00d3d0;">ASSERT_MY_PUZZLEHASH</span> (wrap_in_cat_layer CAT_MOD_HASH CAT_TAIL_HASH my_inner_puzhash))
+    (<span style="color: #feacd0;">c</span>
+      (<span style="color: #feacd0;">list</span> <span style="color: #00d3d0;">ASSERT_MY_AMOUNT</span> my_amount)
+      conditions
+    )
+  )
+)
+</code></pre>
+</section>
