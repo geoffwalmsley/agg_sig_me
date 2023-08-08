@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="agg_sig_me">
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<style type="text/css">.figure {width: 55%; vertical-align: baseline;}</style></head>
+<body>
+<div id="body"><div id="container"><div id="navigation"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="uses_this.html">Uses This</a></div><div id="content"><article><h1 class="title">Mergesort in chialisp</h1>
+<section></section>
+
+<section><h3>Motivation</h3>
+<p>
+I firstly want to thank <a href="https://twitter.com/yakuh1t0">Yak</a> for pointing out a blunder in a draft chialisp puzzle last week. His excellent catch highlighted the need for sanitizing lists which get passed into puzzle solutions. We need a good way to deduplicate lists efficiently, and part of that means we need a good sorting algorithm. This article outlines my first attempt at writing a mergesort for chialisp. Jump to the end for the full code, and please let me know any improvements :)
+</p>
+</section>
+
+<section><h3>Setup</h3>
+<p>
+For this exercise I wanted to use the latest chialisp compiler, <code>*standard-cl-23*</code> which among many cool features gives us access to the <code>assign</code> form. A small downside of this version is that we need to use slightly different macros for the logical operators <code>and</code> and <code>or</code>.
+</p>
+
+<p>
+Merge sort is extremely well documented online, and if you ask GPT it'll spit out a semi-decent implementation in whatever language you want. Unfortunately it will also use functions like <code>member</code> and <code>multiple-value-bind</code> which we don't have in chialisp. So we have to build all the parts ourselves.
+</p>
+
+<p>
+Mergesort uses two primitive functions:
+</p>
+<ol class="org-ol">
+<li>recursively splitting a list in half until we have single values.</li>
+<li>recursively merging the values into sorted lists.</li>
+</ol>
+
+<p>
+To get started though, we want a little helper for checking whether we're at the end of a list. So I borrowed <code>endp</code> from common lisp.
+</p>
+</section>
+
+<section><h3>Checking for the end of a list</h3>
+<p>
+Because cons boxes terminate with a <code>()</code>, there are two ways we can be at the end of a list: either we're in the <code>()</code>, or we're at the last actual value.
+</p>
+
+<pre class="code"><code>(<span style="color: #f78fe7;">defun-inline</span> endp (Z)
+  (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> Z)
+      1
+    (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> (<span style="color: #feacd0;">r</span> Z))
+        1
+      0
+      )
+    )
+  )
+</code></pre>
+</section>
+
+<section><h3>Splitting a list</h3>
+<p>
+List splitting can be done a few ways. The simplest way would be to loop through the elements, and alternate adding each element to one of two accumulator lists. This jumbles up the data though, and assuming we're a friendly wallet who passes in pre-sorted lists, it'd be better to retain the original order. 
+</p>
+
+<p>
+So I've taken the approach of passing in the list twice, iterating through one copy a single element at a time, and the other copy two elements at a time. By the time we get to the end of the second copy, we're halfway through the first. I don't actually know if this comes out more efficiently though.
+</p>
+
+<pre class="code"><code>(<span style="color: #f78fe7;">defun</span> _split (Z L R)
+   (<span style="color: #feacd0;">if</span> (endp R)
+       (<span style="color: #feacd0;">list</span> (reverse L) Z)
+       (_split (<span style="color: #feacd0;">r</span> Z) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> Z) L) (<span style="color: #feacd0;">r</span> (<span style="color: #feacd0;">r</span> R))))
+   )
+
+ (<span style="color: #f78fe7;">defun</span> split (Z)
+   (_split Z () Z))
+</code></pre>
+
+<p>
+Because we're creating the left hand side, <code>L</code>, by consing the elements, it's in reverse order. So we reverse this, which isn't strictly necessary, but satisfies my requirement of retaining the original order.
+</p>
+
+<p>
+Reverse is implemented as follows:
+</p>
+
+<pre class="code"><code>(<span style="color: #f78fe7;">defun</span> _reverse (L R)
+   (<span style="color: #feacd0;">if</span> L
+       (_reverse (<span style="color: #feacd0;">r</span> L) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) R))
+     R))
+
+ (<span style="color: #f78fe7;">defun</span> reverse (L)
+   (_reverse L ()))
+</code></pre>
+</section>
+
+<section><h3>Merging two lists</h3>
+<p>
+The process of merging requires taking the first element of each list, finding which is smaller, and placing it into the output. This produces a reverse order list, so once we've merged them, we again need to reverse the list. If we can get away with a largest to smallest sort then we can do away with this.
+</p>
+
+<ul class="org-ul">
+<li>Starting with the tail condition, our <code>L</code> and <code>R</code> lists are empty, so return the reversed aggregator list <code>A</code>.</li>
+<li>If <code>L</code> is empty, append the first element of <code>R</code> to <code>A</code> and recurse on the rest of <code>R</code></li>
+<li>If <code>R</code> is empty, append the first element of <code>L</code> to <code>A</code> and recurse on the rest of <code>L</code></li>
+<li><p>
+Compare the first elements of <code>L</code> and <code>R</code> and cons the smaller one onto <code>A</code>, then recurse on the remaining items
+</p>
+
+<pre class="code"><code>(<span style="color: #f78fe7;">defun</span> _merge (L R A)
+   <span style="color: #989898;">; </span><span style="color: #989898;">Both L and R are empty so return A</span>
+   (<span style="color: #feacd0;">if</span> (and (<span style="color: #feacd0;">not</span> L) (<span style="color: #feacd0;">not</span> R)) (reverse A)
+     <span style="color: #989898;">; </span><span style="color: #989898;">L is empty so cons (</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> R) onto A and recurse on (</span><span style="color: #feacd0;">r</span><span style="color: #989898;"> R)</span>
+     (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> L) (_merge () (<span style="color: #feacd0;">r</span> R) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> R) A))
+       <span style="color: #989898;">; </span><span style="color: #989898;">R is empty so cons (</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> L) onto A and recurse on (</span><span style="color: #feacd0;">r</span><span style="color: #989898;"> L)</span>
+       (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> R) (_merge (<span style="color: #feacd0;">r</span> L) () (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) A))
+         <span style="color: #989898;">; </span><span style="color: #989898;">(</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> L) is less than or equal (</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> R) so cons it onto A then recurse using (</span><span style="color: #feacd0;">r</span><span style="color: #989898;"> L) and R</span>
+         (<span style="color: #feacd0;">if</span> (&gt; (<span style="color: #feacd0;">f</span> R) (<span style="color: #feacd0;">f</span> L)) (_merge (<span style="color: #feacd0;">r</span> L) R (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) A))
+             <span style="color: #989898;">; </span><span style="color: #989898;">(</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> R) is greater than (</span><span style="color: #feacd0;">f</span><span style="color: #989898;"> L) so cons it onto A then recurse using (</span><span style="color: #feacd0;">r</span><span style="color: #989898;"> R) and L</span>
+             (_merge L (<span style="color: #feacd0;">r</span> R) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> R) A)))))))
+
+ (<span style="color: #f78fe7;">defun</span> merge (L R)
+   (_merge L R ()))
+</code></pre></li>
+</ul>
+</section>
+
+<section><h3>Running the mergesort</h3>
+<p>
+We need a function to pull the splitting and merging together. This is responsible for recursively splitting the list until there is one or no element in <code>L</code> and <code>R</code>. Then we merge the lists together. <code>assign</code> comes in handy for this.
+</p>
+
+<pre class="code"><code>(<span style="color: #f78fe7;">defun</span> mergesort (Z)
+   (<span style="color: #feacd0;">if</span> Z
+       (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">r</span> Z)
+           (<span style="color: #feacd0;">assign</span> (L R) (split Z)
+                   (merge (mergesort L) (mergesort R)))
+         Z)
+     ()))
+</code></pre>
+</section>
+
+<section><h3>Some Examples</h3>
+<pre class="code"><code>(mergesort (<span style="color: #feacd0;">list</span> ()))
+
+=&gt; '(())'
+
+(mergesort (<span style="color: #feacd0;">list</span> 100))
+
+=&gt; '(100)'
+
+(mergesort (<span style="color: #feacd0;">list</span> 100 200))
+
+=&gt; '(100 200)'
+
+(mergesort (<span style="color: #feacd0;">list</span> 500 400 600 200 800))
+
+=&gt; '(200 400 500 600 800)'
+
+(mergesort (<span style="color: #feacd0;">list</span> 700 500 600 400 200 300))
+
+=&gt; '(200 300 400 500 600 700)'
+</code></pre>
+
+<p>
+I will write some tests to measure the performance of this, and maybe tweak it by trying out different approaches to list splitting.
+</p>
+</section>
+
+<section><h3>copy/paste friendly code</h3>
+<pre class="code"><code>(<span style="color: #f78fe7;">include</span> *standard-cl-23*)
+
+(<span style="color: #f78fe7;">defun</span> and_ (CLAUSES)
+   (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">r</span> CLAUSES)
+     (<span style="color: #feacd0;">qq</span> (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">unquote</span> (<span style="color: #feacd0;">f</span> CLAUSES)) (<span style="color: #feacd0;">unquote</span> (and_ (<span style="color: #feacd0;">r</span> CLAUSES))) ()))
+     (<span style="color: #feacd0;">f</span> CLAUSES)
+     )
+   )
+
+(<span style="color: #f78fe7;">defmac</span> and CLAUSES (<span style="color: #feacd0;">if</span> CLAUSES (and_ CLAUSES) 1))
+
+(<span style="color: #f78fe7;">defun</span> or_ (CLAUSES)
+   (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">r</span> CLAUSES) <span style="color: #989898;">;; </span><span style="color: #989898;">There are more.</span>
+     (<span style="color: #feacd0;">qq</span> (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">unquote</span> (<span style="color: #feacd0;">f</span> CLAUSES)) (<span style="color: #feacd0;">unquote</span> (<span style="color: #feacd0;">f</span> CLAUSES)) (<span style="color: #feacd0;">unquote</span> (or_ (<span style="color: #feacd0;">r</span> CLAUSES)))))
+     (<span style="color: #feacd0;">f</span> CLAUSES)
+     )
+   )
+
+ (<span style="color: #f78fe7;">defmac</span> or CLAUSES (<span style="color: #feacd0;">if</span> CLAUSES (or_ CLAUSES) ()))
+
+(<span style="color: #f78fe7;">defun</span> _reverse (L R)
+  (<span style="color: #feacd0;">if</span> L
+      (_reverse (<span style="color: #feacd0;">r</span> L) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) R))
+    R))
+
+(<span style="color: #f78fe7;">defun</span> reverse (L)
+  (_reverse L ()))
+
+(<span style="color: #f78fe7;">defun-inline</span> endp (L)
+  (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> L) 1 (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> (<span style="color: #feacd0;">r</span> L)) 1 0)))
+
+(<span style="color: #f78fe7;">defun</span> _split (Z L R)
+  (<span style="color: #feacd0;">if</span> (endp R)
+      (<span style="color: #feacd0;">list</span> (reverse L) Z)
+      (_split (<span style="color: #feacd0;">r</span> Z) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> Z) L) (<span style="color: #feacd0;">r</span> (<span style="color: #feacd0;">r</span> R))))
+  )
+
+(<span style="color: #f78fe7;">defun</span> split (Z)
+  (_split Z () Z))
+
+(<span style="color: #f78fe7;">defun</span> _merge (L R A)
+  (<span style="color: #feacd0;">if</span> (and (<span style="color: #feacd0;">not</span> L) (<span style="color: #feacd0;">not</span> R)) (reverse A)
+    (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> L) (_merge () (<span style="color: #feacd0;">r</span> R) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> R) A))
+      (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">not</span> R) (_merge (<span style="color: #feacd0;">r</span> L) () (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) A))
+        (<span style="color: #feacd0;">if</span> (&gt; (<span style="color: #feacd0;">f</span> R) (<span style="color: #feacd0;">f</span> L)) (_merge (<span style="color: #feacd0;">r</span> L) R (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> L) A))
+            (_merge L (<span style="color: #feacd0;">r</span> R) (<span style="color: #feacd0;">c</span> (<span style="color: #feacd0;">f</span> R) A)))))))
+
+(<span style="color: #f78fe7;">defun</span> merge (L R)
+  (_merge L R ()))
+
+(<span style="color: #f78fe7;">defun</span> mergesort (Z)
+  (<span style="color: #feacd0;">if</span> Z
+      (<span style="color: #feacd0;">if</span> (<span style="color: #feacd0;">r</span> Z)
+          (<span style="color: #feacd0;">assign</span> (L R) (split Z)
+                  (merge (mergesort L) (mergesort R)))
+        Z)
+    ()))
+</code></pre>
+</section>

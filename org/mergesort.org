@@ -1,0 +1,189 @@
+#+TITLE: Mergesort in chialisp
+#+description: Writing a mergesort for chialisp
+#+keywords: Chia, Chialisp, Chialisp Tutorials, Mergesort, Merge, Sort
+
+** Motivation
+I firstly want to thank [[https://twitter.com/yakuh1t0][Yak]] for pointing out a blunder in a draft chialisp puzzle last week. His excellent catch highlighted the need for sanitizing lists which get passed into puzzle solutions. We need a good way to deduplicate lists efficiently, and part of that means we need a good sorting algorithm. This article outlines my first attempt at writing a mergesort for chialisp. Jump to the end for the full code, and please let me know any improvements :)
+
+** Setup
+For this exercise I wanted to use the latest chialisp compiler, ~*standard-cl-23*~ which among many cool features gives us access to the ~assign~ form. A small downside of this version is that we need to use slightly different macros for the logical operators ~and~ and ~or~.
+
+Merge sort is extremely well documented online, and if you ask GPT it'll spit out a semi-decent implementation in whatever language you want. Unfortunately it will also use functions like ~member~ and ~multiple-value-bind~ which we don't have in chialisp. So we have to build all the parts ourselves.
+
+Mergesort uses two primitive functions:
+1. recursively splitting a list in half until we have single values.
+2. recursively merging the values into sorted lists.
+
+To get started though, we want a little helper for checking whether we're at the end of a list. So I borrowed ~endp~ from common lisp.
+
+** Checking for the end of a list
+Because cons boxes terminate with a ~()~, there are two ways we can be at the end of a list: either we're in the ~()~, or we're at the last actual value.
+
+#+begin_src chialisp
+  (defun-inline endp (Z)
+    (if (not Z)
+        1
+      (if (not (r Z))
+          1
+        0
+        )
+      )
+    )
+#+end_src
+
+** Splitting a list
+List splitting can be done a few ways. The simplest way would be to loop through the elements, and alternate adding each element to one of two accumulator lists. This jumbles up the data though, and assuming we're a friendly wallet who passes in pre-sorted lists, it'd be better to retain the original order. 
+
+So I've taken the approach of passing in the list twice, iterating through one copy a single element at a time, and the other copy two elements at a time. By the time we get to the end of the second copy, we're halfway through the first. I don't actually know if this comes out more efficiently though.
+
+#+begin_src chialisp
+  (defun _split (Z L R)
+     (if (endp R)
+         (list (reverse L) Z)
+         (_split (r Z) (c (f Z) L) (r (r R))))
+     )
+ 
+   (defun split (Z)
+     (_split Z () Z))
+#+end_src
+
+Because we're creating the left hand side, ~L~, by consing the elements, it's in reverse order. So we reverse this, which isn't strictly necessary, but satisfies my requirement of retaining the original order.
+
+Reverse is implemented as follows:
+
+#+begin_src chialisp
+  (defun _reverse (L R)
+     (if L
+         (_reverse (r L) (c (f L) R))
+       R))
+
+   (defun reverse (L)
+     (_reverse L ()))
+#+end_src
+
+** Merging two lists
+The process of merging requires taking the first element of each list, finding which is smaller, and placing it into the output. This produces a reverse order list, so once we've merged them, we again need to reverse the list. If we can get away with a largest to smallest sort then we can do away with this.
+
+- Starting with the tail condition, our ~L~ and ~R~ lists are empty, so return the reversed aggregator list ~A~.
+- If ~L~ is empty, append the first element of ~R~ to ~A~ and recurse on the rest of ~R~
+- If ~R~ is empty, append the first element of ~L~ to ~A~ and recurse on the rest of ~L~
+- Compare the first elements of ~L~ and ~R~ and cons the smaller one onto ~A~, then recurse on the remaining items
+
+  #+begin_src chialisp
+    (defun _merge (L R A)
+       ; Both L and R are empty so return A
+       (if (and (not L) (not R)) (reverse A)
+         ; L is empty so cons (f R) onto A and recurse on (r R)
+         (if (not L) (_merge () (r R) (c (f R) A))
+           ; R is empty so cons (f L) onto A and recurse on (r L)
+           (if (not R) (_merge (r L) () (c (f L) A))
+             ; (f L) is less than or equal (f R) so cons it onto A then recurse using (r L) and R
+             (if (> (f R) (f L)) (_merge (r L) R (c (f L) A))
+                 ; (f R) is greater than (f L) so cons it onto A then recurse using (r R) and L
+                 (_merge L (r R) (c (f R) A)))))))
+
+     (defun merge (L R)
+       (_merge L R ()))
+  #+end_src
+
+** Running the mergesort
+We need a function to pull the splitting and merging together. This is responsible for recursively splitting the list until there is one or no element in ~L~ and ~R~. Then we merge the lists together. ~assign~ comes in handy for this.
+
+#+begin_src chialisp
+  (defun mergesort (Z)
+     (if Z
+         (if (r Z)
+             (assign (L R) (split Z)
+                     (merge (mergesort L) (mergesort R)))
+           Z)
+       ()))
+#+end_src
+
+** Some Examples
+
+#+begin_src chialisp
+  (mergesort (list ()))
+
+  => '(())'
+
+  (mergesort (list 100))
+
+  => '(100)'
+
+  (mergesort (list 100 200))
+
+  => '(100 200)'
+
+  (mergesort (list 500 400 600 200 800))
+
+  => '(200 400 500 600 800)'
+
+  (mergesort (list 700 500 600 400 200 300))
+
+  => '(200 300 400 500 600 700)'
+#+end_src
+
+I will write some tests to measure the performance of this, and maybe tweak it by trying out different approaches to list splitting.
+
+** copy/paste friendly code
+
+#+begin_src chialisp
+ (include *standard-cl-23*)
+
+ (defun and_ (CLAUSES)
+    (if (r CLAUSES)
+      (qq (if (unquote (f CLAUSES)) (unquote (and_ (r CLAUSES))) ()))
+      (f CLAUSES)
+      )
+    )
+
+ (defmac and CLAUSES (if CLAUSES (and_ CLAUSES) 1))
+
+ (defun or_ (CLAUSES)
+    (if (r CLAUSES) ;; There are more.
+      (qq (if (unquote (f CLAUSES)) (unquote (f CLAUSES)) (unquote (or_ (r CLAUSES)))))
+      (f CLAUSES)
+      )
+    )
+
+  (defmac or CLAUSES (if CLAUSES (or_ CLAUSES) ()))
+
+ (defun _reverse (L R)
+   (if L
+       (_reverse (r L) (c (f L) R))
+     R))
+
+ (defun reverse (L)
+   (_reverse L ()))
+
+ (defun-inline endp (L)
+   (if (not L) 1 (if (not (r L)) 1 0)))
+ 
+ (defun _split (Z L R)
+   (if (endp R)
+       (list (reverse L) Z)
+       (_split (r Z) (c (f Z) L) (r (r R))))
+   )
+ 
+ (defun split (Z)
+   (_split Z () Z))
+
+ (defun _merge (L R A)
+   (if (and (not L) (not R)) (reverse A)
+     (if (not L) (_merge () (r R) (c (f R) A))
+       (if (not R) (_merge (r L) () (c (f L) A))
+	 (if (> (f R) (f L)) (_merge (r L) R (c (f L) A))
+	     (_merge L (r R) (c (f R) A)))))))
+ 
+ (defun merge (L R)
+   (_merge L R ()))
+
+ (defun mergesort (Z)
+   (if Z
+       (if (r Z)
+	   (assign (L R) (split Z)
+		   (merge (mergesort L) (mergesort R)))
+	 Z)
+     ()))
+#+end_src
+
