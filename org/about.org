@@ -6,14 +6,9 @@ My location changes fairly frequently:
 - New Zealand (home country)
 - United Kingdom
 - Netherlands
-- Greece (current)
+- Greece
 
 Here are some of my interests:
-- Chess
-- Piano/Guitar
-- Books (currently New Zealand fiction writers)
-- Languages (Greek, German, Maori)
-- Cooking
 - Emacs
 - Rust, Lisp, Mojo
 - Compiler Design
