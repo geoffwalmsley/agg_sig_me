@@ -8,33 +8,43 @@
 <style type="text/css">.figure {width: 55%; vertical-align: baseline;}</style></head>
 <body>
 <div id="body"><div id="container"><div id="navigation"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="uses_this.html">Uses This</a></div><div id="content"><article><h1 class="title">Gophers: Offer-mintable CATs</h1>
-<section></section>
-
-<section><h3>WARNING</h3>
-<p>
-Don't use this with real money, it's for testnet only.
+<section>
+<div id="orgf6a4de9" class="figure">
+<p><img src="images/gopher.png" alt="gopher.png" />
 </p>
+</div>
 </section>
 
-<section><h3>Asset ID</h3>
+<section><h2>WARNING</h2>
 <p>
-<b><code>fc420ec4a569d31210522725abb96c0e4aea003e918b6d95493e75998daaf2c9</code></b>
+Don't use this with real money, it's intended for testnet/simulator only. So use at your own risk.
+</p>
+
+<p>
+ASSET ID: <b><code>fc420ec4a569d31210522725abb96c0e4aea003e918b6d95493e75998daaf2c9</code></b>
 </p>
 </section>
 
 <section><h3>The idea</h3>
 <p>
-I wanted to make a CAT that you can mint yourself if you're spending XCH in an offer. For every 1 XCH you spend when taking an offer, you can mint 1000 Gopher CATs. Gopher is a dumb name, but I watched Caddyshack recently.
+I wanted to make a CAT that you can mint yourself if you're spending XCH in an offer. For every 1 XCH you spend when taking an offer, you can mint 1000 Gopher CATs. 
 </p>
 
 <p>
 The offer file has to request some amount of xch, and the taker can then mint CATs in the amount of 1/1000 of the requested XCH amount. Minting is funded separately by the taker.
 </p>
+
+
+<div id="org26da98f" class="figure">
+<p><img src="images/gopher_wallet.png" alt="gopher_wallet.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Output from a wallet that has minted gophers via an offer</p>
+</div>
 </section>
 
 <section><h3>Quick technical summary</h3>
 <p>
-The tail is what controls when and how many CATs can be minted.
+The tail is what controls when and how many CATs can be minted. You can see the chialisp <a href="https://github.com/geoffwalmsley/chia-blockchain/blob/gopher/chia/wallet/cat_wallet/puzzles/gopher_tail.clsp">here</a>.
 In this case we want a tail that only executes if there's an offer being spent, and it's using xch that we contributed.
 </p>
 
@@ -47,14 +57,17 @@ The problem now is that anyone who sees the offer could mint CATs by just passin
 </p>
 
 <p>
-When we spend XCH to the offer puzzle, we can add another <code>CREATE_COIN</code> condition that generates the gopher CAT eve coin. We concurrently spend the eve coin (with the tail) to finish the minting. Since the XCH offer and the gopher eve come from the same coin, they have the same parent ID. We can access the parent_id in the gopher tail by using the CAT truths it contains. This means we can calculate the xch offer's coin id from: the parent id, the standard offer puzzle hash, and the amount of xch spent (which we calculated from the notarized payments). We can use this in an `ASSERT_CONCURRENT_SPEND` condition which ensures the XCH offer coin is being spent when we're minting the gopher CATs.
+When we spend XCH to the offer puzzle, we can add another <code>CREATE_COIN</code> condition that generates the gopher CAT eve coin. We concurrently spend the eve coin (with the tail) to finish the minting. Since the XCH offer and the gopher eve come from the same coin, they have the same parent ID. We can access the parent_id in the gopher tail by using the CAT truths it contains. This means we can calculate the xch offer's coin id from: our parent id found in cat truths, the standard offer puzzle hash, and the amount of xch spent (which we calculated from the notarized payments). We can use this in an `ASSERT_CONCURRENT_SPEND` condition which ensures the XCH offer coin is being spent when we're minting the gopher CATs.
 </p>
 </section>
 
 <section><h3>Using it</h3>
 <p>
-I hacked it into the chia wallet's CLI and trade manager so you can use it off the branch <a href="https:https://github.com/geoffwalmsley/chia-blockchain/tree/gopher">in my fork</a>.
-Start the wallet as normal. When you take an offer, you just append <code>-g</code> to the <code>take_offer</code> command:
+Only use this if you know what you're doing, it might break normal wallet functionality.
+</p>
+
+<p>
+Run your wallet off the branch <a href="https://github.com/geoffwalmsley/chia-blockchain/tree/gopher">here</a> (light wallet is fine). Start the wallet as normal. When you take an offer, you just append <code>-g</code> to the <code>take_offer</code> command:
 </p>
 
 <pre class="code"><code>chia wallet take_offer cat_for_xch.offer -g
@@ -65,5 +78,9 @@ Start the wallet as normal. When you take an offer, you just append <code>-g</co
 
 <p>
 If it works, then you should see the tokens from the offer, and a new wallet containing the freshly minted gopher CATs.
+</p>
+
+<p>
+Don't forget to shutdown and go back to your regular installation after!
 </p>
 </section>
