@@ -5,6 +5,9 @@
 ** WARNING
 Don't use this with real money, it's for testnet only.
 
+** Asset ID
+*~fc420ec4a569d31210522725abb96c0e4aea003e918b6d95493e75998daaf2c9~*
+
 ** The idea
 I wanted to make a CAT that you can mint yourself if you're spending XCH in an offer. For every 1 XCH you spend when taking an offer, you can mint 1000 Gopher CATs. Gopher is a dumb name, but I watched Caddyshack recently.
 
