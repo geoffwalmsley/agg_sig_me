@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="agg_sig_me">
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<style type="text/css">.figure {width: 55%; vertical-align: baseline;}</style></head>
+<body>
+<div id="body"><div id="container"><div id="navigation"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="uses_this.html">Uses This</a></div><div id="content"><article><h1 class="title">Gophers: Offer-mintable CATs</h1>
+<section></section>
+
+<section><h3>WARNING</h3>
+<p>
+Don't use this with real money, it's for testnet only.
+</p>
+</section>
+
+<section><h3>The idea</h3>
+<p>
+I wanted to make a CAT that you can mint yourself if you're spending XCH in an offer. For every 1 XCH you spend when taking an offer, you can mint 1000 Gopher CATs. Gopher is a dumb name, but I watched Caddyshack recently.
+</p>
+
+<p>
+The offer file has to request some amount of xch, and the taker can then mint CATs in the amount of 1/1000 of the requested XCH amount. Minting is funded separately by the taker.
+</p>
+</section>
+
+<section><h3>Quick technical summary</h3>
+<p>
+The tail is what controls when and how many CATs can be minted.
+In this case we want a tail that only executes if there's an offer being spent, and it's using xch that we contributed.
+</p>
+
+<p>
+To do this, when we run the tail we pass in the notarized payments for the offer. The tail makes puzzle assertions for each notarized payment to match the offer announcements. We use this to calculate the amount of xch being consumed in the offer, and to check that we're minting the right amount.
+</p>
+
+<p>
+The problem now is that anyone who sees the offer could mint CATs by just passing in the notarized payments. To prevent this, we also want to make sure that only the person spending the offer's XCH can mint the CATs.
+</p>
+
+<p>
+When we spend XCH to the offer puzzle, we can add another <code>CREATE_COIN</code> condition that generates the gopher CAT eve coin. We concurrently spend the eve coin (with the tail) to finish the minting. Since the XCH offer and the gopher eve come from the same coin, they have the same parent ID. We can access the parent_id in the gopher tail by using the CAT truths it contains. This means we can calculate the xch offer's coin id from: the parent id, the standard offer puzzle hash, and the amount of xch spent (which we calculated from the notarized payments). We can use this in an `ASSERT_CONCURRENT_SPEND` condition which ensures the XCH offer coin is being spent when we're minting the gopher CATs.
+</p>
+</section>
+
+<section><h3>Using it</h3>
+<p>
+I hacked it into the chia wallet's CLI and trade manager so you can use it off the branch <a href="https:https://github.com/geoffwalmsley/chia-blockchain/tree/gopher">in my fork</a>.
+Start the wallet as normal. When you take an offer, you just append <code>-g</code> to the <code>take_offer</code> command:
+</p>
+
+<pre class="code"><code>chia wallet take_offer cat_for_xch.offer -g
+</code></pre>
+
+<pre class="code"><code>chia wallet take_offer cat_for_xch.offer --gophers
+</code></pre>
+
+<p>
+If it works, then you should see the tokens from the offer, and a new wallet containing the freshly minted gopher CATs.
+</p>
+</section>
